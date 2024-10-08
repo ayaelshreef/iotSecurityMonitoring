@@ -1,5 +1,9 @@
-from .models import Packet
-
 from django.contrib import admin
 
-admin.site.register(Packet)
+from .models import Device, NetworkTraffic, BehavioralPattern, SecurityEvent, Anomaly
+
+admin.site.register(Device)
+admin.site.register(NetworkTraffic)
+admin.site.register(BehavioralPattern)
+admin.site.register(SecurityEvent)
+admin.site.register(Anomaly)

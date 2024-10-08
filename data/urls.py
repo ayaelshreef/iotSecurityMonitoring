@@ -19,5 +19,6 @@ from django.urls import path
 from data import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('data/', views.packets),
+    path('', views.home),
+    path('<int:id>', views.device),
 ]

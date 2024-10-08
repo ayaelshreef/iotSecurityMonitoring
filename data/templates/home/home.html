@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Security Monitoring</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            /* Body background color */
+        }
+
+        .header {
+            background-color: #f8f9fa;
+            /* Changed to #f8f9fa */
+            color: #333;
+            padding: 20px 0;
+            text-align: left;
+            border-radius: 0.5rem 0.5rem 0 0;
+            border-bottom: 1px solid #ddd;
+            /* Optional: Add a border for distinction */
+        }
+
+        .device-list {
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-success {
+            background-color: #507687;
+            /* Button color */
+            border-color: #507687;
+        }
+
+        .btn-success:hover {
+            background-color: #456a77;
+            /* Darker shade for hover effect */
+            border-color: #456a77;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header d-flex justify-content-between align-items-center">
+            <h1 class="h3">IoT Security Monitoring</h1>
+            <button id="scanButton" class="btn btn-success">Scan</button>
+        </header>
+        <main>
+            <section id="deviceList" class="device-list">
+                <h2 class="h5">Devices:</h2>
+                <ul class="list-group">
+                    {% for device in devices %}
+                    <li class="list-group-item"><a href={{device.id}}>device {{device.id}}
+                    </a></li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
