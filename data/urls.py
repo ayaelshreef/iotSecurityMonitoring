@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home),
     path('<int:id>', views.device),
+    path('scan/', views.scan_network_devices),
 ]
