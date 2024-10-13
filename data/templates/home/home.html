@@ -60,12 +60,7 @@
         <main>
             <section id="deviceList" class="device-list">
                 <h2 class="h5">Devices:</h2>
-                <ul class="list-group">
-                    {% for device in devices %}
-                    <li class="list-group-item"><a href={{device.id}}>device {{device.id}}
-                    </a></li>
-                    {% endfor %}
-                </ul>
+                <ul class="list-group"></ul>
             </section>
         </main>
     </div>
@@ -73,6 +68,61 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#scanButton').click(function () {
+                $.ajax({
+                    url: '/scan/', // URL to your Django view
+                    type: 'GET', // or 'POST'
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken') // Include CSRF token if needed
+                    },
+                    success: function (data) {
+                        // Clear the current list
+                        $('#deviceList .list-group').empty();
+                        console.log(data.devices)
+                        console.log(Array.isArray(data.devices))
+                        // Check if the devices array exists
+                        if (data.devices && Array.isArray(data.devices)) {
+                            // Loop through the returned device data and create list items
+                            data.devices.forEach(function (device) {
+                                $('#deviceList .list-group').append(
+                                    '<li class="list-group-item"><a href=' + device.id + '>' + device.ip_address + '</a></li>'
+                                );
+                            });
+                        } else {
+                            $('#deviceList .list-group').append(
+                                '<li class="list-group-item">No devices found.</li>'
+                            );
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                        $('#deviceList .list-group').append(
+                            '<li class="list-group-item">Error retrieving devices.</li>'
+                        );
+                    }
+                });
+            });
+
+            // Function to get CSRF token for AJAX requests
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -2,12 +2,12 @@ from django.db import models
 from django.utils import timezone
 
 class Device(models.Model):
-    device_type = models.CharField(max_length=255)
+    device_type = models.CharField(max_length=255, blank=True, null=True)
     mac_address = models.CharField(max_length=17, unique=True)
     ip_address = models.GenericIPAddressField()
     firmware_version = models.CharField(max_length=50, blank=True, null=True)
     security_settings = models.JSONField(blank=True, null=True)
-    last_seen = models.DateTimeField(default=timezone.now)
+    last_seen = models.DateTimeField(default=timezone.now, blank=True, null=True)
 
     def __str__(self):
         return f"{self.device_type} ({self.ip_address})"
