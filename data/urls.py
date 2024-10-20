@@ -17,9 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from data import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home),
     path('<int:id>', views.device),
     path('scan/', views.scan_network_devices),
+        
+    path('display-packets/start-sniffer/', views.start_sniffer_view),
+    path('display-packets/stop-sniffer/', views.stop_sniffer_view),
+    path('display-packets/', views.display_packets_view),
+    path('display-packets/fetch-packets/', views.fetch_packets_view),
+    
 ]

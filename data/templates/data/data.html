@@ -1,1 +1,139 @@
-{{device}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captured Packets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #456a77;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #456a77;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #456a77;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Captured Packets</h1>
+    <table id="packets-table">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Source IP</th>
+                <th>Destination IP</th>
+                <th>Protocol</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Packet rows will be inserted here -->
+        </tbody>
+    </table>
+    <div class="button-container">
+        <button id="start-sniffer">Start Sniffer</button>
+        <button id="stop-sniffer">Stop Sniffer</button>
+    </div>
+
+    <script>
+        document.getElementById('start-sniffer').addEventListener('click', function () {
+            fetch("start-sniffer", {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.status);
+                });
+        });
+
+        document.getElementById('stop-sniffer').addEventListener('click', function () {
+            fetch("stop-sniffer", {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.status);
+                });
+        });
+
+        function fetchPackets() {
+            fetch("fetch-packets", {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#packets-table tbody');
+                    tableBody.innerHTML = ''; // Clear existing rows
+                    data.packets.forEach(packet => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>${packet.timestamp}</td>
+                        <td>${packet.src_ip}</td>
+                        <td>${packet.dst_ip}</td>
+                        <td>${packet.protocol}</td>
+                        <td>${packet.details}</td>
+                    `;
+                        tableBody.appendChild(row);
+                    });
+                });
+        }
+
+        // Fetch packets every 2 seconds
+        setInterval(fetchPackets, 10000);
+    </script>
+</body>
+
+</html>

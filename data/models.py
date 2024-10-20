@@ -3,7 +3,7 @@ from django.utils import timezone
 
 class Device(models.Model):
     device_type = models.CharField(max_length=255, blank=True, null=True)
-    mac_address = models.CharField(max_length=17, unique=True)
+    mac_address = models.CharField(max_length=225)
     ip_address = models.GenericIPAddressField()
     firmware_version = models.CharField(max_length=50, blank=True, null=True)
     security_settings = models.JSONField(blank=True, null=True)

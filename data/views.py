@@ -2,9 +2,13 @@ import ipaddress, os, subprocess, re, socket, nmap
 
 from django.http import JsonResponse
 from django.shortcuts import render
-from scapy.all import ARP, Ether, srp, conf
+import requests
+from scapy.all import ARP, Ether, srp, sniff, TCP, IP
 from .models import Device
-
+from django.shortcuts import render
+from .sniffer import start_sniffing
+import threading
+from datetime import datetime
 
 def home(request) :
     data = Device.objects.all()
@@ -110,3 +114,44 @@ def scan_network_devices(request):
         return JsonResponse({'devices': list(Device.objects.all().values())})
     
     return JsonResponse({"error": "No IPv4 or Netmask found."})
+
+sniffer_thread = None
+sniffer_running = False
+captured_packets = []
+
+def packet_callback(packet):
+    global captured_packets
+    if packet.haslayer(IP):
+        packet_data = {
+            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'src_ip': packet[IP].src,
+            'dst_ip': packet[IP].dst,
+            'protocol': packet[IP].proto,
+            'details': packet.summary()
+        }
+        captured_packets.append(packet_data)
+
+def start_sniffing():
+    global sniffer_running
+    sniffer_running = True
+    sniff(prn=packet_callback, store=0, stop_filter=lambda x: not sniffer_running)
+
+def start_sniffer_view(request):
+    global sniffer_thread
+    if sniffer_thread is None or not sniffer_thread.is_alive():
+        sniffer_thread = threading.Thread(target=start_sniffing)
+        sniffer_thread.start()
+        return JsonResponse({'status': 'Sniffer started'})
+    else:
+        return JsonResponse({'status': 'Sniffer is already running'})
+    
+def stop_sniffer_view(request):
+    global sniffer_running
+    sniffer_running = False
+    return JsonResponse({'status': 'Sniffer stopped'})
+
+def display_packets_view(request):
+    return render(request, 'data/data.html', {})
+
+def fetch_packets_view(request):
+    return JsonResponse({'packets': captured_packets})

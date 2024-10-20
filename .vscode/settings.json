@@ -1,7 +1,9 @@
 {
     "python.analysis.autoImportCompletions": true,
     "cSpell.words": [
+        "haslayer",
         "ifaddresses",
-        "netifaces"
+        "netifaces",
+        "nmap"
     ]
 }
