@@ -106,30 +106,33 @@
                 });
         });
 
-        function fetchPackets() {
-            fetch("fetch-packets", {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.querySelector('#packets-table tbody');
-                    tableBody.innerHTML = ''; // Clear existing rows
-                    data.packets.forEach(packet => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                        <td>${packet.timestamp}</td>
-                        <td>${packet.src_ip}</td>
-                        <td>${packet.dst_ip}</td>
-                        <td>${packet.protocol}</td>
-                        <td>${packet.details}</td>
-                    `;
-                        tableBody.appendChild(row);
-                    });
-                });
+        function fetchPackets(ipAddress) {
+    fetch(`/fetch-packets/${ipAddress}/`, {  // Include the IP address in the URL
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
         }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const tableBody = document.querySelector('#packets-table tbody');
+        tableBody.innerHTML = ''; // Clear existing rows
+        data.packets.forEach(packet => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${packet.timestamp}</td>
+                <td>${packet.src_ip}</td>
+                <td>${packet.dst_ip}</td>
+                <td>${packet.protocol}</td>
+                <td>${packet.details}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching packets:', error);
+    });
+}
 
         // Fetch packets every 2 seconds
         setInterval(fetchPackets, 10000);

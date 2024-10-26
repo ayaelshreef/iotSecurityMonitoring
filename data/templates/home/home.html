@@ -78,19 +78,18 @@
                     headers: {
                         'X-CSRFToken': getCookie('csrftoken') // Include CSRF token if needed
                     },
-                    success: function (data) {
+                    success: function (devices) {
                         // Clear the current list
                         $('#deviceList .list-group').empty();
-                        console.log(data.devices)
-                        console.log(Array.isArray(data.devices))
                         // Check if the devices array exists
-                        if (data.devices && Array.isArray(data.devices)) {
+                        console.log(Array.isArray(devices.devices))
+                        if (devices.devices && Array.isArray(devices.devices)) {
                             // Loop through the returned device data and create list items
-                            data.devices.forEach(function (device) {
+                            devices.devices.forEach(function (device) {
                                 $('#deviceList .list-group').append(
-                                    '<li class="list-group-item"><a href=' + device.id + '>' + device.ip_address + '</a></li>'
+                                    '<li class="list-group-item"><a href="/packets/' + device.ip + '/">' + device.ip + '</a></li>'
                                 );
-                            });
+                            }); 
                         } else {
                             $('#deviceList .list-group').append(
                                 '<li class="list-group-item">No devices found.</li>'

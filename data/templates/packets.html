@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captured Packets for {{ ip_address }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px 0;
+            text-align: left;
+            border-radius: 0.5rem 0.5rem 0 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .packet-list {
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #507687;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #456a77;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="h3">Captured Packets for {{ ip_address }}</h1>
+        </header>
+        <main>
+            <section class="packet-list">
+                <h2 class="h5">Packets:</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Source IP</th>
+                            <th>Destination IP</th>
+                            <th>Protocol</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="packets-table">
+                        <!-- Packets will be populated here -->
+                    </tbody>
+                </table>
+                <div class="button-container">
+                    <button id="start-sniffer">Start Sniffer</button>
+                    <button id="stop-sniffer">Stop Sniffer</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        const ipAddress = "{{ ip_address }}"; // Ensure this is set correctly in your Django template
+
+        // Start Sniffer
+        document.getElementById('start-sniffer').addEventListener('click', function () {
+            fetch("/start-sniffer", {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.status);
+                })
+                .catch(error => {
+                    console.error('Error starting sniffer:', error);
+                });
+        });
+
+        // Stop Sniffer
+        document.getElementById('stop-sniffer').addEventListener('click', function () {
+            fetch("/stop-sniffer", {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.status);
+                })
+                .catch(error => {
+                    console.error('Error stopping sniffer:', error);
+                });
+        });
+
+        // Fetch Packets
+        function fetchPackets(ipAddress) {
+            fetch(`/fetch-packets/${ipAddress}/`, {  // Include the IP address in the URL
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#packets-table'); // Ensure this matches your HTML
+                    console.log(ipAddress);
+                    tableBody.innerHTML = ''; // Clear existing rows
+                    data.packets.forEach(packet => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>${packet.timestamp}</td>
+                        <td>${packet.src_ip}</td>
+                        <td>${packet.dst_ip}</td>
+                        <td>${packet.protocol}</td>
+                        <td>${packet.details}</td>
+                    `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching packets:', error);
+                });
+        }
+
+        // Fetch packets right away
+        fetchPackets(ipAddress); // Call immediately after defining
+
+        // Fetch packets every 10 seconds
+        const fetchInterval = setInterval(() => fetchPackets(ipAddress), 1000);
+    </script>
+</body>
+
+</html>

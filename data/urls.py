@@ -20,13 +20,15 @@ from data import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
     path('', views.home),
     path('<int:id>', views.device),
-    path('scan/', views.scan_network_devices),
-        
-    path('display-packets/start-sniffer/', views.start_sniffer_view),
-    path('display-packets/stop-sniffer/', views.stop_sniffer_view),
-    path('display-packets/', views.display_packets_view),
-    path('display-packets/fetch-packets/', views.fetch_packets_view),
     
+    path('scan/', views.scan_network_devices),
+
+    path('packets/<str:ip_address>/', views.packets_view),
+    path('fetch-packets/<str:ip_address>/', views.fetch_packets_view),
+    path('display-packets/', views.display_packets_view),
+    path('start-sniffer/', views.start_sniffer_view),
+    path('stop-sniffer/', views.stop_sniffer_view),
 ]
