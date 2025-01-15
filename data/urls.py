@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     path('', views.home),
-    path('<int:id>', views.device),
+    # path('<int:id>', views.device),
     
     path('scan/', views.scan_network_devices),
 
@@ -31,4 +31,7 @@ urlpatterns = [
     path('display-packets/', views.display_packets_view),
     path('start-sniffer/', views.start_sniffer_view),
     path('stop-sniffer/', views.stop_sniffer_view),
+    
+    path('packets/<str:ip_address>/volume', views.calculate_bps),
+    path('get-volume/<str:ip_address>/', views.get_volume),
 ]

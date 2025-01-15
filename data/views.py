@@ -2,21 +2,23 @@ import ipaddress, os, subprocess, re, socket
 
 from nmap import PortScanner
 from django.http import JsonResponse
-from scapy.all import ARP, Ether, srp, sniff, TCP, IP
-from .models import Device
+from scapy.all import ARP, Ether, srp, sniff, TCP, IP, sr1, UDP, DNS, DNSQR, RandShort
+from .models import Device, DeviceVolume
 from django.shortcuts import render
 from .sniffer import start_sniffing
 import threading
 from datetime import datetime
+from time import time
+from collections import deque
 
 # Pages viewing
 def home(request) :
     data = Device.objects.all()
     return render(request, 'home/home.html', {'devices' : data})
 
-def device(request, id) :
-    data = Device.objects.get(pk=id)
-    return render(request, 'data/data.html', {'device' : data})
+# def device(request, id) :
+#     data = Device.objects.get(pk=id)
+#     return render(request, 'data/data.html', {'device' : data})
 
 # Scan iot devices
 def convert_to_cidr(ip, netmask):
@@ -73,79 +75,61 @@ def identify_iot_devices(devices):
             iot_devices.append(device)
     return iot_devices
 
+
 def scan_network_devices(request):
+    
     try:
+        # Identify the command for fetching network configurations
         command = 'ipconfig' if os.name == 'nt' else 'ifconfig'
         output = subprocess.run(command, capture_output=True, text=True, shell=True).stdout
-
-        # Refined adapter detection
-        target_adapters = ['wi-fi', 'wireless', 'wifi']
-        wifi_info = None
         
-        for target in target_adapters:
-            adapters = re.split(r'\n\s*Ethernet adapter |Wireless LAN adapter ', output)
-            for adapter in adapters:
-                if target in adapter.lower():
-                    wifi_info = adapter
-                    break
-            if wifi_info:
-                break
+        wifi_section_start = output.find("Wi-Fi")
+        if wifi_section_start == -1:
+            return "Wi-Fi section not found"
 
-        if not wifi_info:
-            return JsonResponse({"error": "No Wi-Fi information found."})
+        # Extract the section after "Wi-Fi"
+        wifi_section = output[wifi_section_start:]
+        
+        # Look for the first IPv4 address (starting with "192")
+        ip_address = re.search(r"192(?:\.\d+){3}", wifi_section).group()
+        netmask = re.search(r"255(?:\.\d+){3}", wifi_section).group()
+        
+        target_ip = convert_to_cidr(ip_address, netmask)
 
-        # Extract IPv4 Address and Netmask
-        ipv4_address = re.search(r'IPv4 Address[.\s]+:\s+(\d+\.\d+\.\d+\.\d+)', wifi_info)
-        netmask = re.search(r'Subnet Mask[.\s]+:\s+([\d\.]+)', wifi_info)
+        # ARP request to scan devices on the network
+        arp_request = ARP(pdst=target_ip)
+        broadcast = Ether(dst="ff:ff:ff:ff:ff:ff")
+        packet = broadcast / arp_request
 
-        if ipv4_address and netmask:
-            IP_address = ipv4_address.group(1)
-            Netmask = netmask.group(1)
+        # Send ARP packet and capture responses
+        answered = srp(packet, timeout=2, verbose=False)[0]
 
-            # Define the target network range
-            target_ip = convert_to_cidr(IP_address, Netmask)
+        devices = []
+        for sent, received in answered:
+            device_info = {
+                'ip': received.psrc,
+                'mac': received.hwsrc,
+                'os': 'Unknown',  # Optional: Integrate OS detection below if needed
+                'services': []    # Optional: Add service scanning with PortScanner if needed
+            }
 
-            # Create and send ARP request
-            arp = ARP(pdst=target_ip)
-            ether = Ether(dst="ff:ff:ff:ff:ff:ff")
-            packet = ether / arp
-
-            # Send the packet and receive responses
-            result = srp(packet, timeout=2, verbose=False)[0]
-
-            devices = []
-            for sent, received in result:
+            # Optional OS and service detection (comment out if not needed)
+            try:
                 nm = PortScanner()
-                nm.scan(received.psrc, arguments='-O')  # -O for OS detection
-
+                nm.scan(received.psrc, arguments='-O')  # '-O' for OS detection
                 os_info = nm[received.psrc].get('osmatch', [])
-                services_info = nm[received.psrc].get('tcp', {})
+                if os_info:
+                    device_info['os'] = os_info[0].get('name', 'Unknown')
+                device_info['services'] = nm[received.psrc].get('tcp', {}).keys()
+            except Exception as e:
+                pass  # Handle optional scanning errors gracefully
 
-                # Handle the case where os_info is a list
-                os_name = 'Unknown'
-                if os_info and isinstance(os_info, list):
-                    os_name = os_info[0].get('name', 'Unknown')
+            devices.append(device_info)
 
-                device_info = {
-                    'ip': received.psrc,
-                    'mac': received.hwsrc,
-                    'manufacturer': get_mac_manufacturer(received.hwsrc, load_oui_database('data/ieee-oui-database.txt')),
-                    'hostname': resolve_hostname(received.psrc),
-                    'os': os_name,
-                    'services': services_info
-                }
-                devices.append(device_info)
-            
-            return JsonResponse({"devices": devices})
-    
-            # Identify IoT devices
-            iot_devices = identify_iot_devices(devices)
-            return render(request, 'home/home.html', {'iot_devices' : devices})
-
-        return JsonResponse({"error": "No IPv4 or Netmask found."})
+        return JsonResponse({"devices": devices})
 
     except Exception as e:
-        return JsonResponse({"error": str(e)})
+        return JsonResponse({"error": f"An error occurred: {str(e)}"})
 
 sniffer_thread = None
 sniffer_running = False
@@ -187,7 +171,8 @@ def packet_callback(packet):
                 'src_ip': src_ip,
                 'dst_ip': dst_ip,
                 'protocol': packet[IP].proto,
-                'details': packet.summary()
+                'bytes_transferred': len(packet),
+                'details': packet.summary(),
             }
             captured_packets.append(packet_data)
 
@@ -202,3 +187,65 @@ def fetch_packets_view(request, ip_address):
         if packet['src_ip'] == ip_address or packet['dst_ip'] == ip_address
     ]
     return JsonResponse({'packets': filtered_packets})
+
+
+
+def get_packets_func():
+    packets = []
+    def packet_callback(packet):
+        if packet.haslayer('IP'):
+            src_ip = packet['IP'].src
+            dst_ip = packet['IP'].dst
+            data = bytes(packet)  # Entire packet as bytes
+
+            packets.append({
+                'src_ip': src_ip,
+                'dst_ip': dst_ip,
+                'data': data  # This can be the raw packet bytes or payload
+            })
+
+    # Capture packets for 1 second
+    sniff(timeout=1, prn=packet_callback)
+
+    return packets
+
+def calculate_bps(packet, ip_address, monitor_duration_minutes=1):
+    results = []  # To store the total bits transferred for each minute
+    start_time = time()  # Start time of monitoring
+    current_minute_start = start_time  # Track when the current minute started
+
+    while (time() - start_time) < monitor_duration_minutes * 60:
+        # Initialize variables for the current minute
+        minute_bits = 0
+
+        # Loop through the current minute
+        while time() - current_minute_start < 60:
+            # Get packets for the current second
+            packets = get_packets_func()
+            
+            # Calculate bits transferred for packets in the current second
+            for packet in packets:
+                if packet['src_ip'] == ip_address or packet['dst_ip'] == ip_address:
+                    minute_bits += len(packet) * 8  # Convert bytes to bits
+
+        # After 60 seconds, append the result for the current minute
+        bps = minute_bits/60
+        results.append(bps)
+
+        print(f"The volume for the device {ip_address}: {bps} bits per second")
+
+        # Reset the minute timer and continue to the next minute
+        current_minute_start = time()
+
+    device_volume, created = DeviceVolume.objects.update_or_create(
+    ip_address=ip_address,
+    defaults={'volume': max(results)}
+    )
+    return JsonResponse({'volume': max(results)})
+
+def get_volume(request, ip_address):
+    try:
+        device_volume = DeviceVolume.objects.get(ip_address=ip_address)
+        return JsonResponse({'volume': device_volume.volume}, status=200)
+    except DeviceVolume.DoesNotExist:
+        return JsonResponse({'volume': None}, status=404)

@@ -16,6 +16,23 @@
             text-align: center;
         }
 
+        .statistics-box {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stat-item {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -60,6 +77,16 @@
 
 <body>
     <h1>Captured Packets</h1>
+
+    <div class="statistics-box" id="statistics-box">
+        <div class="stat-item" id="volume-display">Volume: {{results}}</div>
+        <!-- Add more stat items here in the future -->
+    </div>
+
+    <div class="button-container">
+        <button id="start-sniffer">Start Sniffer</button>
+        <button id="stop-sniffer">Stop Sniffer</button>
+    </div>
     <table id="packets-table">
         <thead>
             <tr>
@@ -74,10 +101,6 @@
             <!-- Packet rows will be inserted here -->
         </tbody>
     </table>
-    <div class="button-container">
-        <button id="start-sniffer">Start Sniffer</button>
-        <button id="stop-sniffer">Stop Sniffer</button>
-    </div>
 
     <script>
         document.getElementById('start-sniffer').addEventListener('click', function () {
@@ -133,9 +156,20 @@
         console.error('Error fetching packets:', error);
     });
 }
+function updateVolume() {
+            fetch(`/packets/${ipAddress}/volume`)  // Replace with your endpoint to get volume data
+                .then(response => response.json())
+                .then(data => {
+                    const volumeDisplay = document.getElementById('volume-display');
+                    volumeDisplay.textContent = `Volume: ${data.results}`;
+                })
+                .catch(error => {
+                    console.error('Error fetching volume:', error);
+                });
+        }
 
         // Fetch packets every 2 seconds
-        setInterval(fetchPackets, 10000);
+        setInterval(fetchPackets, 20000);
     </script>
 </body>
 

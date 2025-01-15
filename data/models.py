@@ -41,3 +41,8 @@ class Anomaly(models.Model):
     severity = models.CharField(max_length=20)
     timestamp = models.DateTimeField(default=timezone.now)
     actions_taken = models.TextField(blank=True, null=True)
+    
+class DeviceVolume(models.Model):
+    ip_address = models.GenericIPAddressField()
+    volume = models.IntegerField()
+

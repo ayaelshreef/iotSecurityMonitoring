@@ -20,6 +20,23 @@
             border-bottom: 1px solid #ddd;
         }
 
+        .statistics-box {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stat-item {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
         .packet-list {
             margin-top: 20px;
             background-color: white;
@@ -51,9 +68,21 @@
 
 <body>
     <div class="container">
+
         <header class="header">
             <h1 class="h3">Captured Packets for {{ ip_address }}</h1>
         </header>
+
+        <div class="statistics-box" id="statistics-box">
+            <div class="stat-item" id="volume-display">Volume: <span id="volume-value">Loading...</span></div>
+            <!-- Add more stat items here in the future -->
+        </div>
+
+        <div class="button-container">
+            <button id="start-sniffer">Start Sniffer</button>
+            <button id="stop-sniffer">Stop Sniffer</button>
+        </div>
+
         <main>
             <section class="packet-list">
                 <h2 class="h5">Packets:</h2>
@@ -64,6 +93,7 @@
                             <th>Source IP</th>
                             <th>Destination IP</th>
                             <th>Protocol</th>
+                            <th>Bytes Transferred</th>
                             <th>Details</th>
                         </tr>
                     </thead>
@@ -71,10 +101,6 @@
                         <!-- Packets will be populated here -->
                     </tbody>
                 </table>
-                <div class="button-container">
-                    <button id="start-sniffer">Start Sniffer</button>
-                    <button id="stop-sniffer">Stop Sniffer</button>
-                </div>
             </section>
         </main>
     </div>
@@ -117,6 +143,33 @@
                 });
         });
 
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fetch the volume dynamically
+            function fetchVolume(ipAddress) {
+                fetch(`/get-volume/${ipAddress}/`, { // Use the endpoint defined in Django
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const volumeElement = document.getElementById('volume-value');
+                        if (data.volume !== null) {
+                            volumeElement.textContent = data.volume;
+                        } else {
+                            volumeElement.textContent = 'No data available';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching volume:', error);
+                    });
+            }
+
+            // Fetch the volume immediately after the DOM is loaded
+            fetchVolume(ipAddress);
+        });
+
         // Fetch Packets
         function fetchPackets(ipAddress) {
             fetch(`/fetch-packets/${ipAddress}/`, {  // Include the IP address in the URL
@@ -137,6 +190,7 @@
                         <td>${packet.src_ip}</td>
                         <td>${packet.dst_ip}</td>
                         <td>${packet.protocol}</td>
+                        <td>${packet.bytes_transferred}</td>
                         <td>${packet.details}</td>
                     `;
                         tableBody.appendChild(row);
@@ -151,7 +205,7 @@
         fetchPackets(ipAddress); // Call immediately after defining
 
         // Fetch packets every 10 seconds
-        const fetchInterval = setInterval(() => fetchPackets(ipAddress), 1000);
+        const fetchInterval = setInterval(() => fetchPackets(ipAddress), 2000);
     </script>
 </body>
 

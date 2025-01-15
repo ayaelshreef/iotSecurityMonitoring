@@ -89,6 +89,7 @@
                                 $('#deviceList .list-group').append(
                                     '<li class="list-group-item"><a href="/packets/' + device.ip + '/">' + device.ip + '</a></li>'
                                 );
+                                fetchDeviceVolume(device.ip);
                             }); 
                         } else {
                             $('#deviceList .list-group').append(
@@ -120,7 +121,26 @@
                 }
                 return cookieValue;
             }
+
+            // Function to fetch volume data for a specific device by IP
+            function fetchDeviceVolume(ip) {
+                $.ajax({
+                    url: '/packets/' + ip + '/volume', // Request volume for each device
+                    type: 'GET',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken') // Include CSRF token if needed
+                    },
+                    success: function (data) {
+                        console.log("Volume data for IP " + ip + ": ", data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error retrieving volume for IP ' + ip + ':', error);
+                    }
+                });
+            }
+
         });
+
     </script>
 </body>
 
