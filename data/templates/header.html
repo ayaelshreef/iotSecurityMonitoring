@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .static-header {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        .content {
+            margin-top: 60px; /* Adjust based on header height */
+        }
+
+        body {
+            background-color: #f8f9fa;
+            /* Body background color */
+        }
+
+        .header {
+            background-color: #f8f9fa;
+            /* Changed to #f8f9fa */
+            color: #333;
+            padding: 20px 0;
+            text-align: left;
+            border-radius: 0.5rem 0.5rem 0 0;
+            border-bottom: 1px solid #ddd;
+            /* Optional: Add a border for distinction */
+        }
+
+        .device-list {
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-success {
+            background-color: #507687;
+            /* Button color */
+            border-color: #507687;
+        }
+
+        .btn-success:hover {
+            background-color: #456a77;
+            /* Darker shade for hover effect */
+            border-color: #456a77;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Static Header -->
+    <header class="static-header d-flex justify-content-between align-items-center">
+        <h1 class="h5">My Website</h1>
+        <nav>
+            <a href="/" class="btn btn-link">Home</a>
+            <a href="/about/" class="btn btn-link">About</a>
+            <a href="/contact/" class="btn btn-link">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container content">
+        {% block content %}
+        <!-- Page-specific content goes here -->
+        {% endblock %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -34,4 +34,5 @@ urlpatterns = [
     
     path('packets/<str:ip_address>/volume', views.calculate_bps),
     path('get-volume/<str:ip_address>/', views.get_volume),
+    path('check-volume/<str:ip_address>/', views.check_volume_exceeded),
 ]

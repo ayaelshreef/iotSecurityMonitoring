@@ -1,5 +1,4 @@
 import ipaddress, os, subprocess, re, socket
-
 from nmap import PortScanner
 from django.http import JsonResponse
 from scapy.all import ARP, Ether, srp, sniff, TCP, IP, sr1, UDP, DNS, DNSQR, RandShort
@@ -14,11 +13,7 @@ from collections import deque
 # Pages viewing
 def home(request) :
     data = Device.objects.all()
-    return render(request, 'home/home.html', {'devices' : data})
-
-# def device(request, id) :
-#     data = Device.objects.get(pk=id)
-#     return render(request, 'data/data.html', {'device' : data})
+    return render(request, 'home.html', {'devices' : data})
 
 # Scan iot devices
 def convert_to_cidr(ip, netmask):
@@ -249,3 +244,29 @@ def get_volume(request, ip_address):
         return JsonResponse({'volume': device_volume.volume}, status=200)
     except DeviceVolume.DoesNotExist:
         return JsonResponse({'volume': None}, status=404)
+
+def check_volume_exceeded(request, ip_address):
+    # Simulate fetching packets and calculating current minute volume
+    device_volume = DeviceVolume.objects.get(ip_address=ip_address).volume
+    minute_bits = 0
+    current_minute_start = time()
+    
+    try:
+        # Loop through the current minute
+        while time() - current_minute_start < 60:
+            # Get packets for the current second
+            packets = get_packets_func()
+            
+            # Calculate bits transferred for packets in the current second
+            for packet in packets:
+                if packet['src_ip'] == ip_address or packet['dst_ip'] == ip_address:
+                    minute_bits += len(packet) * 8  # Convert bytes to bits
+
+        # After 60 seconds, append the result for the current minute
+        current_volume = minute_bits/60
+        if current_volume > device_volume:
+            return JsonResponse({"exceeded": True})
+        else:
+            return JsonResponse({"exceeded": False})
+    except DeviceVolume.DoesNotExist:
+            pass  # Ignore packets without a matching DeviceVolume entry

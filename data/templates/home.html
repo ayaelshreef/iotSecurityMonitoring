@@ -90,7 +90,14 @@
                                     '<li class="list-group-item"><a href="/packets/' + device.ip + '/">' + device.ip + '</a></li>'
                                 );
                                 fetchDeviceVolume(device.ip);
-                            }); 
+
+                                // Fetch the check-volume path every minute for each device
+                                setTimeout(function () {
+                                    setInterval(function () {
+                                        fetchDeviceVolumeCheck(device.ip);
+                                    }, 60000); // 60000ms = 1 minute
+                                }, 60000);
+                            });
                         } else {
                             $('#deviceList .list-group').append(
                                 '<li class="list-group-item">No devices found.</li>'
@@ -139,8 +146,22 @@
                 });
             }
 
+            function fetchDeviceVolumeCheck(ip) {
+                $.ajax({
+                    url: '/check-volume/' + ip + '/', // Request check-volume for each device
+                    type: 'GET',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken') // Include CSRF token if needed
+                    },
+                    success: function (data) {
+                        console.log("Check volume for IP " + ip + ": ", data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error retrieving check volume for IP ' + ip + ':', error);
+                    }
+                });
+            }
         });
-
     </script>
 </body>
 
