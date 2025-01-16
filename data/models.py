@@ -48,6 +48,7 @@ class Device(models.Model):
     volume = models.DecimalField(max_digits=50, decimal_places=2, null=True)
     speed = models.DecimalField(max_digits=50, decimal_places=2, null=True)
     # frequency = models.DecimalField(max_digits=50, decimal_places=2, null=True)
+    is_active = models.BooleanField(default=True)
 
 # class Settings(models.Model):
 #     training_time_in_minitues

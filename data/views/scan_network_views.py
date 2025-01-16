@@ -2,8 +2,8 @@ import ipaddress, subprocess, re, os
 from django.http import JsonResponse
 from scapy.all import ARP, Ether, srp
 from data.models import Device
+from data.utils import firebase
 
-# Scan iot devices
 def convert_to_cidr(ip, netmask):
     # Create an IPv4 network object
     network = ipaddress.IPv4Network(f"{ip}/{netmask}", strict=False)
@@ -58,9 +58,7 @@ def identify_iot_devices(devices):
             iot_devices.append(device)
     return iot_devices
 
-
 def scan_network_devices(request):
-    
     try:
         # Identify the command for fetching network configurations
         command = 'ipconfig' if os.name == 'nt' else 'ifconfig'
@@ -88,6 +86,8 @@ def scan_network_devices(request):
         answered = srp(packet, timeout=2, verbose=False)[0]
 
         devices = []
+        processed_mac_addresses = []
+
         for sent, received in answered:
             device_info = {
                 'ip': received.psrc,
@@ -96,23 +96,39 @@ def scan_network_devices(request):
                 # 'services': []    # Optional: Add service scanning with PortScanner if needed
             }
 
-            # Optional OS and service detection (comment out if not needed)
-            try:
-                # nm = PortScanner()
-                nm.scan(received.psrc, arguments='-O')  # '-O' for OS detection
-                os_info = nm[received.psrc].get('osmatch', [])
-                if os_info:
-                    device_info['os'] = os_info[0].get('name', 'Unknown')
-                device_info['services'] = nm[received.psrc].get('tcp', {}).keys()
-            except Exception as e:
-                pass  # Handle optional scanning errors gracefully
-
             Device.objects.update_or_create(
-            ip_address=ip_address,
-            defaults={"mac_address" : received.hwsrc}
+            mac_address=device_info['mac'],
+            defaults={
+                "ip_address" : device_info['ip'],
+                "is_active" : True
+                }
             )
-
+            
+            processed_mac_addresses.append(device_info['mac'])
+            
+            defaults={
+                "ip_address" : device_info['ip'],
+                "is_active" : True
+                }
+            
+            firebase.update_or_create_device(device_info['mac'], defaults)
             devices.append(device_info)
+            # # Optional OS and service detection (comment out if not needed)
+            # try:
+            #     # nm = PortScanner()
+            #     nm.scan(received.psrc, arguments='-O')  # '-O' for OS detection
+            #     os_info = nm[received.psrc].get('osmatch', [])
+            #     if os_info:
+            #         device_info['os'] = os_info[0].get('name', 'Unknown')
+            #     device_info['services'] = nm[received.psrc].get('tcp', {}).keys()
+                
+            # except Exception as e:
+            #     pass  # Handle optional scanning errors gracefully
+
+        Device.objects.exclude(mac_address__in=processed_mac_addresses).update(is_active=False)
+
+        firebase.update_devices_activity(processed_mac_addresses)
+
         return JsonResponse({"devices": devices})
 
     except Exception as e:
