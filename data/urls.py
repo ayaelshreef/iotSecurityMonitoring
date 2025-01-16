@@ -34,5 +34,8 @@ urlpatterns = [
     
     path('packets/<str:ip_address>/volume', views.calculate_bps),
     path('get-volume/<str:ip_address>/', views.get_volume),
-    path('check-volume/<str:ip_address>/', views.check_volume_exceeded),
+    path('check-dos/<str:ip_address>/', views.check_dos_attack),
+    
+    path('packets/<str:ip_address>/speed', views.calculate_pps),
+    path('get-speed/<str:ip_address>/', views.get_speed),
 ]

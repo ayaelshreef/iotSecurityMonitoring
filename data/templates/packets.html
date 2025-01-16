@@ -75,6 +75,7 @@
 
         <div class="statistics-box" id="statistics-box">
             <div class="stat-item" id="volume-display">Volume: <span id="volume-value">Loading...</span></div>
+            <div class="stat-item" id="speed-display">Speed: <span id="speed-value">Loading...</span></div>
             <!-- Add more stat items here in the future -->
         </div>
 
@@ -165,9 +166,29 @@
                         console.error('Error fetching volume:', error);
                     });
             }
-
-            // Fetch the volume immediately after the DOM is loaded
+            // Fetch the speed dynamically
+            function fetchSpeed(ipAddress) {
+                fetch(`/get-speed/${ipAddress}/`, { // Use the endpoint defined in Django
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const speedElement = document.getElementById('speed-value');
+                        if (data.speed !== null) {
+                            speedElement.textContent = data.speed;
+                        } else {
+                            speedElement.textContent = 'No data available';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching speed:', error);
+                    });
+            }
             fetchVolume(ipAddress);
+            fetchSpeed(ipAddress);
         });
 
         // Fetch Packets

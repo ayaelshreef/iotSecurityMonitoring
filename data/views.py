@@ -2,7 +2,7 @@ import ipaddress, os, subprocess, re, socket
 from nmap import PortScanner
 from django.http import JsonResponse
 from scapy.all import ARP, Ether, srp, sniff, TCP, IP, sr1, UDP, DNS, DNSQR, RandShort
-from .models import Device, DeviceVolume
+from .models import Device
 from django.shortcuts import render
 from .sniffer import start_sniffing
 import threading
@@ -119,8 +119,12 @@ def scan_network_devices(request):
             except Exception as e:
                 pass  # Handle optional scanning errors gracefully
 
-            devices.append(device_info)
+            Device.objects.update_or_create(
+            ip_address=ip_address,
+            defaults={"mac_address" : received.hwsrc}
+            )
 
+            devices.append(device_info)
         return JsonResponse({"devices": devices})
 
     except Exception as e:
@@ -232,22 +236,21 @@ def calculate_bps(packet, ip_address, monitor_duration_minutes=1):
         # Reset the minute timer and continue to the next minute
         current_minute_start = time()
 
-    device_volume, created = DeviceVolume.objects.update_or_create(
-    ip_address=ip_address,
-    defaults={'volume': max(results)}
-    )
+    Device.objects.filter(ip_address=ip_address).update(volume=max(results))
+
     return JsonResponse({'volume': max(results)})
 
 def get_volume(request, ip_address):
     try:
-        device_volume = DeviceVolume.objects.get(ip_address=ip_address)
+        device_volume = Device.objects.get(ip_address=ip_address)
         return JsonResponse({'volume': device_volume.volume}, status=200)
-    except DeviceVolume.DoesNotExist:
+    except Device.DoesNotExist:
         return JsonResponse({'volume': None}, status=404)
 
-def check_volume_exceeded(request, ip_address):
+def check_dos_attack(request, ip_address):
     # Simulate fetching packets and calculating current minute volume
-    device_volume = DeviceVolume.objects.get(ip_address=ip_address).volume
+    device_volume = Device.objects.get(ip_address=ip_address).volume
+    device_speed = Device.objects.get(ip_address=ip_address).speed
     minute_bits = 0
     current_minute_start = time()
     
@@ -261,12 +264,57 @@ def check_volume_exceeded(request, ip_address):
             for packet in packets:
                 if packet['src_ip'] == ip_address or packet['dst_ip'] == ip_address:
                     minute_bits += len(packet) * 8  # Convert bytes to bits
+                    minute_packets += 1  
 
         # After 60 seconds, append the result for the current minute
         current_volume = minute_bits/60
-        if current_volume > device_volume:
+        current_speed = minute_packets/60
+        if current_volume > device_volume and current_speed > device_speed:
             return JsonResponse({"exceeded": True})
         else:
             return JsonResponse({"exceeded": False})
-    except DeviceVolume.DoesNotExist:
+    except Device.DoesNotExist:
             pass  # Ignore packets without a matching DeviceVolume entry
+        
+        
+
+
+
+def calculate_pps(packet, ip_address, monitor_duration_minutes=1):
+    results = []  # To store the total bits transferred for each minute
+    start_time = time()  # Start time of monitoring
+    current_minute_start = start_time  # Track when the current minute started
+
+    while (time() - start_time) < monitor_duration_minutes * 60:
+        # Initialize variables for the current minute
+        minute_packets = 0
+
+        # Loop through the current minute
+        while time() - current_minute_start < 60:
+            # Get packets for the current second
+            packets = get_packets_func()
+            
+            # Calculate bits transferred for packets in the current second
+            for packet in packets:
+                if packet['src_ip'] == ip_address or packet['dst_ip'] == ip_address:
+                    minute_packets += 1  
+
+        # After 60 seconds, append the result for the current minute
+        pps = minute_packets/60
+        results.append(pps)
+
+        print(f"The speed for the device {ip_address}: {pps} packets per second")
+
+        # Reset the minute timer and continue to the next minute
+        current_minute_start = time()
+
+    Device.objects.filter(ip_address=ip_address).update(speed=max(results))
+
+    return JsonResponse({'speed': max(results)})
+
+def get_speed(request, ip_address):
+    try:
+        device_speed = Device.objects.get(ip_address=ip_address)
+        return JsonResponse({'speed': device_speed.speed}, status=200)
+    except Device.DoesNotExist:
+        return JsonResponse({'speed': None}, status=404)
