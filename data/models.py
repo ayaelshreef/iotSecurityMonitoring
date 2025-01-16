@@ -47,4 +47,7 @@ class Device(models.Model):
     mac_address = models.CharField(max_length=225, null=True)
     volume = models.DecimalField(max_digits=50, decimal_places=2, null=True)
     speed = models.DecimalField(max_digits=50, decimal_places=2, null=True)
+    # frequency = models.DecimalField(max_digits=50, decimal_places=2, null=True)
 
+# class Settings(models.Model):
+#     training_time_in_minitues

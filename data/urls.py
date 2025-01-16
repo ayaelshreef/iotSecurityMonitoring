@@ -16,26 +16,27 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from data import views
+from data.views import packets_views, pages_views, scan_network_views
+from data.views.attacks_check import dos_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path('', views.home),
+    path('', pages_views.home),
     # path('<int:id>', views.device),
     
-    path('scan/', views.scan_network_devices),
+    path('scan/', scan_network_views.scan_network_devices),
 
-    path('packets/<str:ip_address>/', views.packets_view),
-    path('fetch-packets/<str:ip_address>/', views.fetch_packets_view),
-    path('display-packets/', views.display_packets_view),
-    path('start-sniffer/', views.start_sniffer_view),
-    path('stop-sniffer/', views.stop_sniffer_view),
+    path('packets/<str:ip_address>/', packets_views.packets_view),
+    path('fetch-packets/<str:ip_address>/', packets_views.fetch_packets_view),
+    path('display-packets/', packets_views.display_packets_view),
+    path('start-sniffer/', packets_views.start_sniffer_view),
+    path('stop-sniffer/', packets_views.stop_sniffer_view),
     
-    path('packets/<str:ip_address>/volume', views.calculate_bps),
-    path('get-volume/<str:ip_address>/', views.get_volume),
-    path('check-dos/<str:ip_address>/', views.check_dos_attack),
+    path('packets/<str:ip_address>/volume', dos_views.calculate_bps),
+    path('get-volume/<str:ip_address>/', dos_views.get_volume),
+    path('check-dos/<str:ip_address>/', dos_views.check_dos_attack),
     
-    path('packets/<str:ip_address>/speed', views.calculate_pps),
-    path('get-speed/<str:ip_address>/', views.get_speed),
+    path('packets/<str:ip_address>/speed', dos_views.calculate_pps),
+    path('get-speed/<str:ip_address>/', dos_views.get_speed),
 ]
