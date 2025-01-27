@@ -55,11 +55,11 @@
     <div class="container">
         <header class="header d-flex justify-content-between align-items-center">
             <h1 class="h3">IoT Security Monitoring</h1>
-            <button id="scanButton" class="btn btn-success">Scan</button>
+            <!-- Removed scan button -->
         </header>
         <main>
             <section id="deviceList" class="device-list">
-                <h2 class="h5">Devices:</h2>
+                <h2 class="h5">Active Devices:</h2>
                 <ul class="list-group"></ul>
             </section>
         </main>
@@ -71,112 +71,52 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#scanButton').click(function () {
+            // Function to load active devices
+            function loadActiveDevices() {
                 $.ajax({
-                    url: '/scan/', // URL to your Django view
-                    type: 'GET', // or 'POST'
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken') // Include CSRF token if needed
-                    },
-                    success: function (devices) {
+                    url: '', // Using the same URL as before
+                    type: 'GET',
+                    success: function (data) {
                         // Clear the current list
                         $('#deviceList .list-group').empty();
-                        // Check if the devices array exists
-                        console.log(Array.isArray(devices.devices))
-                        if (devices.devices && Array.isArray(devices.devices)) {
-                            // Loop through the returned device data and create list items
-                            devices.devices.forEach(function (device) {
-                                $('#deviceList .list-group').append(
-                                    '<li class="list-group-item"><a href="/packets/' + device.ip + '/">' + device.ip + '</a></li>'
-                                );
-                                fetchDeviceVolume(device.ip);
-                                fetchDeviceSpeed(device.ip);
 
-                                setTimeout(function () {
-                                    setInterval(function () {
-                                        fetchDosCheck(device.ip);
-                                    }, 60000); // 60000ms = 1 minute
-                                }, 60000);
+                        if (data.devices && data.devices.length > 0) {
+                            data.devices.forEach(function (device) {
+                                // Format volume and speed
+                                const volumeDisplay = device.volume == 0 ? '--' : device.volume;
+                                const speedDisplay = device.speed == 0 ? '--' : device.speed;
+                                console.log("updated successfully")
+                                $('#deviceList .list-group').append(`
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <a href="/packets/${device.ip}/">${device.ip}</a>
+                                        <span>
+                                            <span class="badge badge-primary badge-pill">Volume: ${volumeDisplay}</span>
+                                            <span class="badge badge-info badge-pill">Speed: ${speedDisplay}</span>
+                                        </span>
+                                    </li>
+                                `);
                             });
                         } else {
                             $('#deviceList .list-group').append(
-                                '<li class="list-group-item">No devices found.</li>'
+                                '<li class="list-group-item text-center">No active devices found.</li>'
                             );
                         }
                     },
                     error: function (xhr, status, error) {
                         console.error('Error:', error);
                         $('#deviceList .list-group').append(
-                            '<li class="list-group-item">Error retrieving devices.</li>'
+                            '<li class="list-group-item text-center text-danger">Error retrieving devices.</li>'
                         );
                     }
                 });
-            });
-
-            // Function to get CSRF token for AJAX requests
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
             }
 
-            // Function to fetch volume data for a specific device by IP
-            function fetchDeviceVolume(ip) {
-                $.ajax({
-                    url: '/packets/' + ip + '/volume', // Request volume for each device
-                    type: 'GET',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken') // Include CSRF token if needed
-                    },
-                    success: function (data) {
-                        console.log("Volume data for IP " + ip + ": ", data);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error retrieving volume for IP ' + ip + ':', error);
-                    }
-                });
-            }
+            // Load devices when page loads
+            loadActiveDevices();
 
-            function fetchDeviceSpeed(ip) {
-                $.ajax({
-                    url: '/packets/' + ip + '/speed', // Request speed for each device
-                    type: 'GET',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken') // Include CSRF token if needed
-                    },
-                    success: function (data) {
-                        console.log("Speed data for IP " + ip + ": ", data);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error retrieving speed for IP ' + ip + ':', error);
-                    }
-                });
-            }
+            // Refresh the device list every 30 seconds
+            setInterval(loadActiveDevices, 30000);
 
-            function fetchDosCheck(ip) {
-                $.ajax({
-                    url: '/check-dos/' + ip + '/',
-                    type: 'GET',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken') // Include CSRF token if needed
-                    },
-                    success: function (data) {
-                        console.log("Check Dos for IP " + ip + ": ", data);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error retrieving check dos for IP ' + ip + ':', error);
-                    }
-                });
-            }
         });
     </script>
 </body>

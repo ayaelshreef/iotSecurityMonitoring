@@ -1,7 +1,11 @@
 from django.http import JsonResponse
 from scapy.all import sniff, IP
-from data.models import Device
+from data.models import Device, Packet
 from time import time
+from django.db.models import F
+from django.shortcuts import get_object_or_404
+from datetime import datetime
+from collections import defaultdict
 
 def get_packets_func():
     packets = []
@@ -9,140 +13,145 @@ def get_packets_func():
         if packet.haslayer('IP'):
             src_ip = packet['IP'].src
             dst_ip = packet['IP'].dst
+        
             data = bytes(packet)  # Entire packet as bytes
-
             packets.append({
                 'src_ip': src_ip,
                 'dst_ip': dst_ip,
-                'data': data  # This can be the raw packet bytes or payload
+                'data': data
             })
 
-    # Capture packets for 1 second
-    sniff(timeout=1, prn=packet_callback)
+    # Capture packets for 60 seconds
+    sniff(timeout=60, prn=packet_callback)
 
     return packets
 
-def calculate_bps(packet, ip_address, monitor_duration_minutes=1):
-    results = []  # To store the total bits transferred for each minute
-    start_time = time()  # Start time of monitoring
-    current_minute_start = start_time  # Track when the current minute started
-
-    while (time() - start_time) < monitor_duration_minutes * 60:
-        # Initialize variables for the current minute
-        minute_bits = 0
-
-        # Loop through the current minute
-        while time() - current_minute_start < 60:
-            # Get packets for the current second
-            packets = get_packets_func()
-            
-            # Calculate bits transferred for packets in the current second
-            for packet in packets:
-                if packet['src_ip'] == ip_address or packet['dst_ip'] == ip_address:
-                    minute_bits += len(packet) * 8  # Convert bytes to bits
-
-        # After 60 seconds, append the result for the current minute
-        bps = minute_bits/60
-        results.append(bps)
-
-        print(f"The volume for the device {ip_address}: {bps} bits per second")
-
-        # Reset the minute timer and continue to the next minute
-        current_minute_start = time()
-
-    Device.objects.filter(ip_address=ip_address).update(volume=max(results))
-
-    return JsonResponse({'volume': max(results)})
-
-def get_volume(request, ip_address):
-    try:
-        device_volume = Device.objects.get(ip_address=ip_address)
-        return JsonResponse({'volume': device_volume.volume}, status=200)
-    except Device.DoesNotExist:
-        return JsonResponse({'volume': None}, status=404)
-
-def check_dos_attack(request, ip_address):
-    # Simulate fetching packets and calculating current minute volume
-    device_volume = Device.objects.get(ip_address=ip_address).volume
-    device_speed = Device.objects.get(ip_address=ip_address).speed
-    minute_bits = 0
-    current_minute_start = time()
+def check_dos_attack():
+    # Get all eligible devices
+    devices = Device.objects.filter(is_active=True, training_minutes__gte=60)
     
-    try:
-        # Loop through the current minute
-        while time() - current_minute_start < 60:
-            # Get packets for the current second
-            packets = get_packets_func()
-            
-            # Calculate bits transferred for packets in the current second
-            for packet in packets:
-                if packet['src_ip'] == ip_address or packet['dst_ip'] == ip_address:
-                    minute_bits += len(packet) * 8  # Convert bytes to bits
-                    minute_packets += 1  
+    if not devices.exists():
+        return JsonResponse({'message': "No eligible devices to monitor"}, status=404)
 
-        # After 60 seconds, append the result for the current minute
-        current_volume = minute_bits/60
-        current_speed = minute_packets/60
-        if current_volume > device_volume and current_speed > device_speed:
-            return JsonResponse({"exceeded": True})
-        else:
-            return JsonResponse({"exceeded": False})
-    except Device.DoesNotExist:
-            pass  # Ignore packets without a matching DeviceVolume entry
-        
-        
-
-
-
-def calculate_pps(packet, ip_address, monitor_duration_minutes=1):
-    results = []  # To store the total bits transferred for each minute
-    start_time = time()  # Start time of monitoring
-    current_minute_start = start_time  # Track when the current minute started
-
-    while (time() - start_time) < monitor_duration_minutes * 60:
-        # Initialize variables for the current minute
-        minute_packets = 0
-
-        # Loop through the current minute
-        while time() - current_minute_start < 60:
-            # Get packets for the current second
-            packets = get_packets_func()
-            
-            # Calculate bits transferred for packets in the current second
-            for packet in packets:
-                if packet['src_ip'] == ip_address or packet['dst_ip'] == ip_address:
-                    minute_packets += 1  
-
-        # After 60 seconds, append the result for the current minute
-        pps = minute_packets/60
-        results.append(pps)
-
-        print(f"The speed for the device {ip_address}: {pps} packets per second")
-
-        # Reset the minute timer and continue to the next minute
-        current_minute_start = time()
-
-    Device.objects.filter(ip_address=ip_address).update(speed=max(results))
-
-    return JsonResponse({'speed': max(results)})
-
-def get_speed(request, ip_address):
-    try:
-        device_speed = Device.objects.get(ip_address=ip_address)
-        return JsonResponse({'speed': device_speed.speed}, status=200)
-    except Device.DoesNotExist:
-        return JsonResponse({'speed': None}, status=404)
+    # Monitor network for one minute
+    packets = get_packets_func()
     
+    # Track metrics per device
+    device_metrics = defaultdict(lambda: {'bits': 0, 'packet_count': 0})
+    
+    # Calculate metrics for each device
+    for packet in packets:
+        for device in devices:
+            if packet['src_ip'] == device.ip_address or packet['dst_ip'] == device.ip_address:
+                device_metrics[device.ip_address]['bits'] += len(packet['data']) * 8
+                device_metrics[device.ip_address]['packet_count'] += 1
 
-def add_request(device_ip):
-    current_time = int(time() * 1000)  # Current time in milliseconds
-    key = f"device:{device_ip}:requests"
+    # Check for potential DoS attacks
+    attacked_devices = []
+    for device in devices:
+        metrics = device_metrics[device.ip_address]
+        current_volume = metrics['bits'] / 60  # bits per second
+        current_speed = metrics['packet_count'] / 60  # packets per second
+        
+        if current_volume > device.volume and current_speed > device.speed:
+            attacked_devices.append({
+                'ip_address': device.ip_address,
+                'current_volume': current_volume,
+                'threshold_volume': device.volume,
+                'current_speed': current_speed,
+                'threshold_speed': device.speed
+            })
+    
+    if attacked_devices:
+        return JsonResponse({
+            'status': 'warning',
+            'message': 'Potential DoS attack detected',
+            'attacked_devices': attacked_devices
+        })
+    
+    return JsonResponse({
+        'status': 'ok',
+        'message': 'No DoS attacks detected'
+    })
 
-    # Add timestamp to sorted set
-    redis_client.zadd(key, {current_time: current_time})
+def calculate_parameters(request):
+    devices = Device.objects.filter(
+        is_active=True,
+        training_minutes__lt=60 
+    )
+    
+    if not devices.exists():
+        return JsonResponse({'message': "There are no active devices in the network"}, status=404)
+        
+    for device in devices:
+        # Replace direct packet capture with database query
+        packets = device.packet_set.all()
+        
+        total_bits = sum(packet.bytes_transferred * 8 for packet in packets)  # Convert bytes to bits
+        num_packets = packets.count()
 
-    # Remove entries older than 60 seconds
-    redis_client.zremrangebyscore(key, 0, current_time - 60000)
+        bps = total_bits / 60
+        pps = num_packets / 60
+        
+        device.volume = max(bps, device.volume)
+        device.speed = max(pps, device.speed)
+        device.training_minutes += 1
+        device.save()
+        
+        # Delete all packets for this device after calculations
+        device.packet_set.all().delete()
+        
+    return JsonResponse({
+        "status": "success",
+        "processed_devices": len(devices),
+    })
 
-    # Set TTL for automatic cleanup
-    redis_client.expire(key, 120)  # Optional: 2-minute expiration
+def store_captured_packets():
+    # Get eligible devices (active and training_minutes < 60)
+    devices = Device.objects.filter(
+        is_active=True,
+        training_minutes__lt=60
+    ).exclude(
+        packet__isnull=False  # Exclude devices that already have packets
+    )
+    
+    if not devices.exists():
+        return {"message": "No eligible devices found"}
+    
+    # Create a dict to store packets for each device
+    device_packets = defaultdict(list)
+    device_ips = {device.ip_address: device for device in devices}
+    
+        # Get packets for all devices at once
+    packets = get_packets_func()  # Assuming this returns packets for all network traffic
+    
+    # Sort packets by device
+    for packet in packets:
+        # Check if either source or destination IP belongs to our devices
+        if packet['src_ip'] in device_ips:
+            device_packets[packet['src_ip']].append(packet)
+        if packet['dst_ip'] in device_ips and packet['src_ip'] != packet['dst_ip']:
+            device_packets[packet['dst_ip']].append(packet)
+    
+    # Store all captured packets in the database
+    for ip_address, packets in device_packets.items():
+        device = device_ips[ip_address]
+        timestamp = datetime.now()
+        
+        # Bulk create packets for better performance
+        Packet.objects.bulk_create([
+            Packet(
+                device=device,
+                timestamp=timestamp,
+                src_ip=packet['src_ip'],
+                dst_ip=packet['dst_ip'],
+                protocol=packet.get('protocol', 0),
+                bytes_transferred=len(packet.get('data', '')),
+                details=str(packet)
+            ) for packet in packets
+        ])
+    
+    return {
+        "status": "success",
+        "message": f"Packets captured and stored for {len(device_packets)} devices"
+    }

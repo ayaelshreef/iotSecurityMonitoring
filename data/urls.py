@@ -23,20 +23,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     path('', pages_views.home),
-    # path('<int:id>', views.device),
+    path('packets/<str:ip_address>/', packets_views.packets_view),
     
     path('scan/', scan_network_views.scan_network_devices),
 
-    path('packets/<str:ip_address>/', packets_views.packets_view),
     path('fetch-packets/<str:ip_address>/', packets_views.fetch_packets_view),
-    path('display-packets/', packets_views.display_packets_view),
     path('start-sniffer/', packets_views.start_sniffer_view),
     path('stop-sniffer/', packets_views.stop_sniffer_view),
     
-    path('packets/<str:ip_address>/volume', dos_views.calculate_bps),
-    path('get-volume/<str:ip_address>/', dos_views.get_volume),
-    path('check-dos/<str:ip_address>/', dos_views.check_dos_attack),
-    
-    path('packets/<str:ip_address>/speed', dos_views.calculate_pps),
-    path('get-speed/<str:ip_address>/', dos_views.get_speed),
+    path('devices/calculate-parameters', dos_views.calculate_parameters),
+    # path('check-dos/<str:ip_address>/', dos_views.check_dos_attack),
 ]

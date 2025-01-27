@@ -71,10 +71,10 @@ def scan_network_devices(request):
         # Extract the section after "Wi-Fi"
         wifi_section = output[wifi_section_start:]
         
-        # Look for the first IPv4 address (starting with "192")
-        ip_address = re.search(r"192(?:\.\d+){3}", wifi_section).group()
+        # Look for the IPv4 address 
+        ip_address = re.search(r"(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)", wifi_section).group()
         netmask = re.search(r"255(?:\.\d+){3}", wifi_section).group()
-        
+        #if not found ip4_address
         target_ip = convert_to_cidr(ip_address, netmask)
 
         # ARP request to scan devices on the network
@@ -113,18 +113,7 @@ def scan_network_devices(request):
             
             firebase.update_or_create_device(device_info['mac'], defaults)
             devices.append(device_info)
-            # # Optional OS and service detection (comment out if not needed)
-            # try:
-            #     # nm = PortScanner()
-            #     nm.scan(received.psrc, arguments='-O')  # '-O' for OS detection
-            #     os_info = nm[received.psrc].get('osmatch', [])
-            #     if os_info:
-            #         device_info['os'] = os_info[0].get('name', 'Unknown')
-            #     device_info['services'] = nm[received.psrc].get('tcp', {}).keys()
-                
-            # except Exception as e:
-            #     pass  # Handle optional scanning errors gracefully
-
+            
         Device.objects.exclude(mac_address__in=processed_mac_addresses).update(is_active=False)
 
         firebase.update_devices_activity(processed_mac_addresses)

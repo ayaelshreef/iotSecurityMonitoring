@@ -45,10 +45,21 @@ from django.utils import timezone
 class Device(models.Model):
     ip_address = models.GenericIPAddressField()
     mac_address = models.CharField(max_length=225, null=True)
-    volume = models.DecimalField(max_digits=50, decimal_places=2, null=True)
-    speed = models.DecimalField(max_digits=50, decimal_places=2, null=True)
+    volume = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
+    speed = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
     # frequency = models.DecimalField(max_digits=50, decimal_places=2, null=True)
     is_active = models.BooleanField(default=True)
-
+    # is_trained = models.BooleanField(default=True)
+    # is_trained = models.BooleanField(default=True)
+    training_minutes = models.IntegerField(default=0)
 # class Settings(models.Model):
 #     training_time_in_minitues
+
+class Packet(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField()
+    src_ip = models.GenericIPAddressField()
+    dst_ip = models.GenericIPAddressField()
+    protocol = models.IntegerField()
+    bytes_transferred = models.IntegerField()
+    details = models.TextField()

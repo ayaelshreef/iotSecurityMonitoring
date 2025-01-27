@@ -73,9 +73,14 @@
             <h1 class="h3">Captured Packets for {{ ip_address }}</h1>
         </header>
 
+        {% if error_message %}
+        <div class="alert alert-warning text-center">
+            {{ error_message }}
+        </div>
+        {% else %}
         <div class="statistics-box" id="statistics-box">
-            <div class="stat-item" id="volume-display">Volume: <span id="volume-value">Loading...</span></div>
-            <div class="stat-item" id="speed-display">Speed: <span id="speed-value">Loading...</span></div>
+            <div class="stat-item" id="volume-display">Volume: <span id="volume-value">{{ volume }}</span></div>
+            <div class="stat-item" id="speed-display">Speed: <span id="speed-value">{{ speed }}</span></div>
             <!-- Add more stat items here in the future -->
         </div>
 
@@ -104,6 +109,7 @@
                 </table>
             </section>
         </main>
+        {% endif %}
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -144,53 +150,6 @@
                 });
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Fetch the volume dynamically
-            function fetchVolume(ipAddress) {
-                fetch(`/get-volume/${ipAddress}/`, { // Use the endpoint defined in Django
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        const volumeElement = document.getElementById('volume-value');
-                        if (data.volume !== null) {
-                            volumeElement.textContent = data.volume;
-                        } else {
-                            volumeElement.textContent = 'No data available';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching volume:', error);
-                    });
-            }
-            // Fetch the speed dynamically
-            function fetchSpeed(ipAddress) {
-                fetch(`/get-speed/${ipAddress}/`, { // Use the endpoint defined in Django
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        const speedElement = document.getElementById('speed-value');
-                        if (data.speed !== null) {
-                            speedElement.textContent = data.speed;
-                        } else {
-                            speedElement.textContent = 'No data available';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching speed:', error);
-                    });
-            }
-            fetchVolume(ipAddress);
-            fetchSpeed(ipAddress);
-        });
-
         // Fetch Packets
         function fetchPackets(ipAddress) {
             fetch(`/fetch-packets/${ipAddress}/`, {  // Include the IP address in the URL
@@ -227,6 +186,7 @@
 
         // Fetch packets every 10 seconds
         const fetchInterval = setInterval(() => fetchPackets(ipAddress), 2000);
+
     </script>
 </body>
 
