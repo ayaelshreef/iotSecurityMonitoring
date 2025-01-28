@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from data.views import packets_views, pages_views, scan_network_views
 from data.views.attacks_check import dos_views
+from .views import notifications_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,11 +27,16 @@ urlpatterns = [
     path('packets/<str:ip_address>/', packets_views.packets_view),
     
     path('scan/', scan_network_views.scan_network_devices),
+    path('check/', dos_views.check_dos_attack),
 
     path('fetch-packets/<str:ip_address>/', packets_views.fetch_packets_view),
     path('start-sniffer/', packets_views.start_sniffer_view),
     path('stop-sniffer/', packets_views.stop_sniffer_view),
     
     path('devices/calculate-parameters', dos_views.calculate_parameters),
-    # path('check-dos/<str:ip_address>/', dos_views.check_dos_attack),
+    
+    # Notification API endpoints
+    path('api/notifications/', notifications_views.get_notifications),
+    path('api/notifications/<int:notification_id>/mark-read/', notifications_views.mark_notification_read),
+    path('api/notifications/mark-all-read/', notifications_views.mark_all_read),
 ]

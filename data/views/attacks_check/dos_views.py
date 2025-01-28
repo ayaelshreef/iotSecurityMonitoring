@@ -1,9 +1,6 @@
 from django.http import JsonResponse
-from scapy.all import sniff, IP
-from data.models import Device, Packet
-from time import time
-from django.db.models import F
-from django.shortcuts import get_object_or_404
+from scapy.all import sniff
+from data.models import Device, Packet, Notification
 from datetime import datetime
 from collections import defaultdict
 
@@ -26,7 +23,7 @@ def get_packets_func():
 
     return packets
 
-def check_dos_attack():
+def check_dos_attack(request):
     # Get all eligible devices
     devices = Device.objects.filter(is_active=True, training_minutes__gte=60)
     
@@ -63,6 +60,14 @@ def check_dos_attack():
             })
     
     if attacked_devices:
+        # Create notification for the DoS attack
+        notification_message = f"Potential DoS attack detected on {len(attacked_devices)} device(s)"
+        Notification.objects.create(
+            type='dos_attack',
+            message=notification_message,
+            details=attacked_devices
+        )
+        
         return JsonResponse({
             'status': 'warning',
             'message': 'Potential DoS attack detected',

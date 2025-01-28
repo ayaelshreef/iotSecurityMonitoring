@@ -63,3 +63,23 @@ class Packet(models.Model):
     protocol = models.IntegerField()
     bytes_transferred = models.IntegerField()
     details = models.TextField()
+
+class Notification(models.Model):
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    details = models.TextField(null=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
+
+    # severity = models.CharField(max_length=20, choices=[
+    #     ('low', 'Low'),
+    #     ('medium', 'Medium'),
+    #     ('high', 'High'),
+    #     ('critical', 'Critical')
+    # ], default='medium')
+    
+    # class Meta:
+    #     ordering = ['-timestamp']
+
+    # def __str__(self):
+    #     return f"{self.get_severity_display()} - {self.timestamp.strftime('%Y-%m-%d %H:%M:%S')}"

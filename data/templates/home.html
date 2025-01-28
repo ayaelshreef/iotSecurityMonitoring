@@ -1,124 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IoT Security Monitoring</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            /* Body background color */
-        }
+{% block content %}
+<header class="header d-flex justify-content-between align-items-center">
+    <h1 class="h3">IoT Security Monitor</h1>
+</header>
+<main>
+    <section id="deviceList" class="device-list">
+        <h2 class="h5">Active Devices:</h2>
+        <ul class="list-group"></ul>
+    </section>
+</main>
+{% endblock %}
 
-        .header {
-            background-color: #f8f9fa;
-            /* Changed to #f8f9fa */
-            color: #333;
-            padding: 20px 0;
-            text-align: left;
-            border-radius: 0.5rem 0.5rem 0 0;
-            border-bottom: 1px solid #ddd;
-            /* Optional: Add a border for distinction */
-        }
+{% block extra_js %}
+<script>
+    $(document).ready(function () {
+        // Function to load active devices
+        function loadActiveDevices() {
+            $.ajax({
+                url: '', // Using the same URL as before
+                type: 'GET',
+                success: function (data) {
+                    // Clear the current list
+                    $('#deviceList .list-group').empty();
 
-        .device-list {
-            margin-top: 20px;
-            background-color: white;
-            border-radius: 0.5rem;
-            padding: 15px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-success {
-            background-color: #507687;
-            /* Button color */
-            border-color: #507687;
-        }
-
-        .btn-success:hover {
-            background-color: #456a77;
-            /* Darker shade for hover effect */
-            border-color: #456a77;
-        }
-
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #777;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <header class="header d-flex justify-content-between align-items-center">
-            <h1 class="h3">IoT Security Monitoring</h1>
-            <!-- Removed scan button -->
-        </header>
-        <main>
-            <section id="deviceList" class="device-list">
-                <h2 class="h5">Active Devices:</h2>
-                <ul class="list-group"></ul>
-            </section>
-        </main>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Function to load active devices
-            function loadActiveDevices() {
-                $.ajax({
-                    url: '', // Using the same URL as before
-                    type: 'GET',
-                    success: function (data) {
-                        // Clear the current list
-                        $('#deviceList .list-group').empty();
-
-                        if (data.devices && data.devices.length > 0) {
-                            data.devices.forEach(function (device) {
-                                // Format volume and speed
-                                const volumeDisplay = device.volume == 0 ? '--' : device.volume;
-                                const speedDisplay = device.speed == 0 ? '--' : device.speed;
-                                console.log("updated successfully")
-                                $('#deviceList .list-group').append(`
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <a href="/packets/${device.ip}/">${device.ip}</a>
-                                        <span>
-                                            <span class="badge badge-primary badge-pill">Volume: ${volumeDisplay}</span>
-                                            <span class="badge badge-info badge-pill">Speed: ${speedDisplay}</span>
-                                        </span>
-                                    </li>
-                                `);
-                            });
-                        } else {
-                            $('#deviceList .list-group').append(
-                                '<li class="list-group-item text-center">No active devices found.</li>'
-                            );
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error:', error);
+                    if (data.devices && data.devices.length > 0) {
+                        data.devices.forEach(function (device) {
+                            // Format volume and speed
+                            const volumeDisplay = device.volume == 0 ? '--' : device.volume;
+                            const speedDisplay = device.speed == 0 ? '--' : device.speed;
+                            console.log("updated successfully")
+                            $('#deviceList .list-group').append(`
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="/packets/${device.ip}/">${device.ip}</a>
+                                    <span>
+                                        <span class="badge badge-primary badge-pill">Volume: ${volumeDisplay}</span>
+                                        <span class="badge badge-info badge-pill">Speed: ${speedDisplay}</span>
+                                    </span>
+                                </li>
+                            `);
+                        });
+                    } else {
                         $('#deviceList .list-group').append(
-                            '<li class="list-group-item text-center text-danger">Error retrieving devices.</li>'
+                            '<li class="list-group-item text-center">No active devices found.</li>'
                         );
                     }
-                });
-            }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    $('#deviceList .list-group').append(
+                        '<li class="list-group-item text-center text-danger">Error retrieving devices.</li>'
+                    );
+                }
+            });
+        }
 
-            // Load devices when page loads
-            loadActiveDevices();
+        // Load devices when page loads
+        loadActiveDevices();
 
-            // Refresh the device list every 30 seconds
-            setInterval(loadActiveDevices, 30000);
-
-        });
-    </script>
-</body>
-
-</html>
+        // Refresh the device list every 30 seconds
+        setInterval(loadActiveDevices, 30000);
+    });
+</script>
+{% endblock %}
