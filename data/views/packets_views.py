@@ -8,7 +8,7 @@ from collections import deque
 from data.models import Device, Packet
 from django.db.models import Min
 from django.utils import timezone
-
+from data.models import Setting
 sniffer_thread = None
 sniffer_running = False
 filter_ip_address = None 
@@ -72,7 +72,7 @@ def packet_callback(packet):
                 'details': packet.summary(),
             }
             captured_packets.append(packet_data)
-        if device.training_minutes < 60 and (not first_packet_time or 
+        if device.training_minutes < Setting.objects.first().training_minutes and (not first_packet_time or 
                     (current_time - first_packet_time).total_seconds() <= 60):
                     Packet.objects.create(
                         device=device,

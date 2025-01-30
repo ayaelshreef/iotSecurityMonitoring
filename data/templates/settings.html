@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings - IoT Security Monitor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .settings-card {
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+    }
+
+    .settings-card h2 {
+        color: #507687;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        color: #4a4a4a;
+    }
+
+    .notification-log {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .notification-item {
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+        transition: background-color 0.2s;
+    }
+
+    .notification-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .notification-time {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .notification-message {
+        margin-top: 0.5rem;
+    }
+
+    .notification-details {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .notification-type {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+        background-color: #e9ecef;
+    }
+
+    .save-btn {
+        background-color: #507687;
+        border-color: #507687;
+    }
+
+    .save-btn:hover {
+        background-color: #456a77;
+        border-color: #456a77;
+    }
+
+    /* New styles for the side navigation */
+    .settings-container {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .settings-nav {
+        width: 250px;
+        flex-shrink: 0;
+    }
+
+    .settings-nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .settings-nav-item {
+        padding: 1rem;
+        cursor: pointer;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        color: #4a4a4a;
+        transition: background-color 0.2s;
+    }
+
+    .settings-nav-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .settings-nav-item.active {
+        background-color: #507687;
+        color: white !important;
+    }
+
+    .settings-content {
+        flex-grow: 1;
+    }
+
+    .settings-section {
+        display: none;
+    }
+
+    .settings-section.active {
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+    <div class="col-12">
+        <h1 class="h3 mb-4">Settings</h1>
+        
+        <div class="settings-container">
+            <!-- Side Navigation -->
+            <div class="settings-nav">
+                <ul class="settings-nav-list">
+                    <li class="settings-nav-item active" data-section="configuration">Configuration</li>
+                    <li class="settings-nav-item" data-section="logs">Notification Logs</li>
+                </ul>
+            </div>
+
+            <!-- Content Area -->
+            <div class="settings-content">
+                <!-- Training Configuration -->
+                <div id="configuration" class="settings-section settings-card active">
+                    <h2>Training Configuration</h2>
+                    <form id="trainingSettingsForm">
+                        <div class="form-group">
+                            <label for="trainingMinutes">Training Time (minutes)</label>
+                            <input type="number" class="form-control" id="trainingMinutes" name="trainingMinutes" 
+                                   min="1" value="{{ current_training_minutes }}" required>
+                            <small class="form-text text-muted">
+                                Set the duration for system training. Increasing this value will trigger additional training for the remaining time.
+                            </small>
+                        </div>
+                        <button type="submit" class="btn btn-primary save-btn">Save Changes</button>
+                    </form>
+                </div>
+
+                <!-- Notification Logs -->
+                <div id="logs" class="settings-section settings-card">
+                    <h2>Notification Logs</h2>
+                    <div class="notification-log">
+                        {% for notification in notifications %}
+                        <div class="notification-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="notification-time">
+                                    {{ notification.timestamp|date:"Y-m-d H:i:s" }}
+                                    {% if notification.type %}
+                                    <span class="notification-type">{{ notification.type }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="badge {% if notification.is_read %}badge-secondary{% else %}badge-primary{% endif %}">
+                                    {{ notification.is_read|yesno:"Read,Unread" }}
+                                </div>
+                            </div>
+                            <div class="notification-message">{{ notification.message }}</div>
+                            {% if notification.details %}
+                            <div class="notification-details">
+                                {{ notification.details }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% empty %}
+                        <div class="text-center text-muted py-4">
+                            No notifications found
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Handle training settings form submission
+    $('#trainingSettingsForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const minutes = $('#trainingMinutes').val();
+        
+        $.ajax({
+            url: '/api/settings/training-time/',
+            type: 'POST',
+            data: {
+                training_minutes: minutes
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    alert('Training time updated successfully');
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function() {
+                alert('Error updating training time');
+            }
+        });
+    });
+
+    // Handle navigation clicks
+    $('.settings-nav-item').on('click', function() {
+        // Remove active class from all items and sections
+        $('.settings-nav-item').removeClass('active');
+        $('.settings-section').removeClass('active');
+        
+        // Add active class to clicked item
+        $(this).addClass('active');
+        
+        // Show corresponding section
+        const sectionId = $(this).data('section');
+        $(`#${sectionId}`).addClass('active');
+    });
+});
+</script>
+{% endblock %}

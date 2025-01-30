@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from data.views import packets_views, pages_views, scan_network_views
+from data.views import packets_views, pages_views, scan_network_views, settings_views
 from data.views.attacks_check import dos_views
 from .views import notifications_views
 
@@ -39,4 +39,8 @@ urlpatterns = [
     path('api/notifications/', notifications_views.get_notifications),
     path('api/notifications/<int:notification_id>/mark-read/', notifications_views.mark_notification_read),
     path('api/notifications/mark-all-read/', notifications_views.mark_all_read),
+    
+    # Settings
+    path('settings/', pages_views.settings_view, name='settings'),
+    path('api/settings/training-time/', settings_views.update_training_time, name='update_training_time'),
 ]

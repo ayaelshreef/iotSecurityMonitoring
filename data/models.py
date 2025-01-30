@@ -49,11 +49,12 @@ class Device(models.Model):
     speed = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
     # frequency = models.DecimalField(max_digits=50, decimal_places=2, null=True)
     is_active = models.BooleanField(default=True)
-    # is_trained = models.BooleanField(default=True)
-    # is_trained = models.BooleanField(default=True)
+    number_of_users = models.IntegerField(default=1)
     training_minutes = models.IntegerField(default=0)
-# class Settings(models.Model):
-#     training_time_in_minitues
+    is_trained = models.BooleanField(default=False)
+    
+class Setting(models.Model):
+    training_minutes = models.IntegerField(default=60)
 
 class Packet(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)

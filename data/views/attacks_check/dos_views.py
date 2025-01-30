@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from scapy.all import sniff
-from data.models import Device, Packet, Notification
+from data.models import Device, Packet, Notification, Setting
 from datetime import datetime
 from collections import defaultdict
 
@@ -25,7 +25,7 @@ def get_packets_func():
 
 def check_dos_attack(request):
     # Get all eligible devices
-    devices = Device.objects.filter(is_active=True, training_minutes__gte=60)
+    devices = Device.objects.filter(is_active=True, is_trained=True)
     
     if not devices.exists():
         return JsonResponse({'message': "No eligible devices to monitor"}, status=404)
@@ -82,7 +82,7 @@ def check_dos_attack(request):
 def calculate_parameters(request):
     devices = Device.objects.filter(
         is_active=True,
-        training_minutes__lt=60 
+        training_minutes__lt= Setting.objects.first().training_minutes      
     )
     
     if not devices.exists():
@@ -101,6 +101,12 @@ def calculate_parameters(request):
         device.volume = max(bps, device.volume)
         device.speed = max(pps, device.speed)
         device.training_minutes += 1
+        
+        if device.training_minutes >= Setting.objects.first().training_minutes:
+            device.is_trained = True
+        else:
+            device.is_trained = False
+    
         device.save()
         
         # Delete all packets for this device after calculations
@@ -115,7 +121,7 @@ def store_captured_packets():
     # Get eligible devices (active and training_minutes < 60)
     devices = Device.objects.filter(
         is_active=True,
-        training_minutes__lt=60
+        training_minutes__lt=Setting.objects.first().training_minutes
     ).exclude(
         packet__isnull=False  # Exclude devices that already have packets
     )
