@@ -14,7 +14,7 @@
 
         .navbar {
             background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-brand {
@@ -85,7 +85,7 @@
             width: 300px;
             background-color: white;
             border-radius: 0.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: none;
             z-index: 1000;
             max-height: 400px;
@@ -142,9 +142,9 @@
             text-align: center;
             color: #666;
         }
-
-        /* {% block extra_css %}{% endblock %} */
     </style>
+
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body>
@@ -164,7 +164,8 @@
                         <a class="nav-link {% if '/packets' in request.path %}active{% endif %}" href="/packets">Packets</a>
                     </li> -->
                     <li class="nav-item position-relative">
-                        <a class="nav-link {% if '/attacks' in request.path %}active{% endif %}" href="/attacks" id="notificationsDropdown">
+                        <a class="nav-link {% if '/attacks' in request.path %}active{% endif %}" href="/attacks"
+                            id="notificationsDropdown">
                             Security Alerts
                             <span class="notification-badge">0</span>
                         </a>
@@ -179,7 +180,8 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if '/settings' in request.path %}active{% endif %}" href="/settings">Settings</a>
+                        <a class="nav-link {% if '/settings' in request.path %}active{% endif %}"
+                            href="/settings">Settings</a>
                     </li>
                 </ul>
             </div>
@@ -197,11 +199,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             let notificationsVisible = false;
 
             // Toggle notifications dropdown
-            $('#notificationsDropdown').click(function(e) {
+            $('#notificationsDropdown').click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 $('.notifications-dropdown').toggle();
@@ -209,7 +211,7 @@
             });
 
             // Close notifications when clicking outside
-            $(document).click(function() {
+            $(document).click(function () {
                 if (notificationsVisible) {
                     $('.notifications-dropdown').hide();
                     notificationsVisible = false;
@@ -217,17 +219,17 @@
             });
 
             // Prevent dropdown from closing when clicking inside it
-            $('.notifications-dropdown').click(function(e) {
+            $('.notifications-dropdown').click(function (e) {
                 e.stopPropagation();
             });
 
             // Mark all notifications as read
-            $('.mark-all-read').click(function(e) {
+            $('.mark-all-read').click(function (e) {
                 e.preventDefault();
                 $.ajax({
                     url: '/api/notifications/mark-all-read/',
                     type: 'POST',
-                    success: function() {
+                    success: function () {
                         $('.notification-item').removeClass('unread');
                         updateNotificationBadge(0);
                     }
@@ -264,14 +266,14 @@
             }
 
             // Click handler for individual notifications
-            $(document).on('click', '.notification-item', function() {
+            $(document).on('click', '.notification-item', function () {
                 const notificationId = $(this).data('id');
                 $(this).removeClass('unread');
-                
+
                 $.ajax({
                     url: `/api/notifications/${notificationId}/mark-read/`,
                     type: 'POST',
-                    success: function() {
+                    success: function () {
                         const unreadCount = $('.notification-item.unread').length;
                         updateNotificationBadge(unreadCount);
                     }
@@ -283,7 +285,7 @@
                 $.ajax({
                     url: '/api/notifications/',
                     type: 'GET',
-                    success: function(data) {
+                    success: function (data) {
                         $('.notifications-list').empty();
                         if (data.notifications && data.notifications.length > 0) {
                             data.notifications.forEach(addNotification);
@@ -306,7 +308,7 @@
                 ws_scheme + '://' + window.location.host + '/ws/notifications/'
             );
 
-            notificationSocket.onmessage = function(e) {
+            notificationSocket.onmessage = function (e) {
                 const data = JSON.parse(e.data);
                 if (data.type === 'notification') {
                     addNotification(data.notification);
@@ -323,4 +325,4 @@
     {% block extra_js %}{% endblock %}
 </body>
 
-</html> 
+</html>

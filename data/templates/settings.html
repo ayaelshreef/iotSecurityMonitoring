@@ -7,7 +7,7 @@
     .settings-card {
         background: white;
         border-radius: 0.5rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 2rem;
         padding: 1.5rem;
     }
@@ -125,7 +125,7 @@
 <div class="row mt-4">
     <div class="col-12">
         <h1 class="h3 mb-4">Settings</h1>
-        
+
         <div class="settings-container">
             <!-- Side Navigation -->
             <div class="settings-nav">
@@ -143,10 +143,11 @@
                     <form id="trainingSettingsForm">
                         <div class="form-group">
                             <label for="trainingMinutes">Training Time (minutes)</label>
-                            <input type="number" class="form-control" id="trainingMinutes" name="trainingMinutes" 
-                                   min="1" value="{{ current_training_minutes }}" required>
+                            <input type="number" class="form-control" id="trainingMinutes" name="trainingMinutes"
+                                min="1" value="{{ current_training_minutes }}" required>
                             <small class="form-text text-muted">
-                                Set the duration for system training. Increasing this value will trigger additional training for the remaining time.
+                                Set the duration for system training. Increasing this value will trigger additional
+                                training for the remaining time.
                             </small>
                         </div>
                         <button type="submit" class="btn btn-primary save-btn">Save Changes</button>
@@ -166,7 +167,8 @@
                                     <span class="notification-type">{{ notification.type }}</span>
                                     {% endif %}
                                 </div>
-                                <div class="badge {% if notification.is_read %}badge-secondary{% else %}badge-primary{% endif %}">
+                                <div
+                                    class="badge {% if notification.is_read %}badge-secondary{% else %}badge-primary{% endif %}">
                                     {{ notification.is_read|yesno:"Read,Unread" }}
                                 </div>
                             </div>
@@ -192,45 +194,45 @@
 
 {% block extra_js %}
 <script>
-$(document).ready(function() {
-    // Handle training settings form submission
-    $('#trainingSettingsForm').on('submit', function(e) {
-        e.preventDefault();
-        
-        const minutes = $('#trainingMinutes').val();
-        
-        $.ajax({
-            url: '/api/settings/training-time/',
-            type: 'POST',
-            data: {
-                training_minutes: minutes
-            },
-            success: function(response) {
-                if (response.status === 'success') {
-                    alert('Training time updated successfully');
-                } else {
-                    alert('Error: ' + response.message);
+    $(document).ready(function () {
+        // Handle training settings form submission
+        $('#trainingSettingsForm').on('submit', function (e) {
+            e.preventDefault();
+
+            const minutes = $('#trainingMinutes').val();
+
+            $.ajax({
+                url: '/api/settings/training-time/',
+                type: 'POST',
+                data: {
+                    training_minutes: minutes
+                },
+                success: function (response) {
+                    if (response.status === 'success') {
+                        alert('Training time updated successfully');
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function () {
+                    alert('Error updating training time');
                 }
-            },
-            error: function() {
-                alert('Error updating training time');
-            }
+            });
+        });
+
+        // Handle navigation clicks
+        $('.settings-nav-item').on('click', function () {
+            // Remove active class from all items and sections
+            $('.settings-nav-item').removeClass('active');
+            $('.settings-section').removeClass('active');
+
+            // Add active class to clicked item
+            $(this).addClass('active');
+
+            // Show corresponding section
+            const sectionId = $(this).data('section');
+            $(`#${sectionId}`).addClass('active');
         });
     });
-
-    // Handle navigation clicks
-    $('.settings-nav-item').on('click', function() {
-        // Remove active class from all items and sections
-        $('.settings-nav-item').removeClass('active');
-        $('.settings-section').removeClass('active');
-        
-        // Add active class to clicked item
-        $(this).addClass('active');
-        
-        // Show corresponding section
-        const sectionId = $(this).data('section');
-        $(`#${sectionId}`).addClass('active');
-    });
-});
 </script>
 {% endblock %}
