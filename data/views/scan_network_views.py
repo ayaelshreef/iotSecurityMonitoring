@@ -58,7 +58,7 @@ def identify_iot_devices(devices):
             iot_devices.append(device)
     return iot_devices
 
-def scan_network_devices(request):
+def scan_network_devices():
     try:
         # Identify the command for fetching network configurations
         command = 'ipconfig' if os.name == 'nt' else 'ifconfig'
