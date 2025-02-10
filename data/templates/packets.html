@@ -114,6 +114,8 @@
         </main>
         {% endif %}
     </div>
+    {% endblock %}
+    {% block extra_js %}
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
@@ -191,7 +193,7 @@
         const fetchInterval = setInterval(() => fetchPackets(ipAddress), 2000);
 
     </script>
+    {% endblock %}
 </body>
 
 </html>
-{% endblock %}

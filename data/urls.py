@@ -42,4 +42,8 @@ urlpatterns = [
     # Settings
     path('settings/', pages_views.settings_view, name='settings'),
     path('api/settings/training-time/', settings_views.update_training_time, name='update_training_time'),
+    
+    # Device management endpoints
+    path('api/devices/<int:device_id>/update/', pages_views.update_device, name='update_device'),
+    path('api/devices/<int:device_id>/delete/', pages_views.delete_device, name='delete_device'),
 ]
