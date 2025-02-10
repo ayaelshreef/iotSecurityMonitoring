@@ -3,6 +3,8 @@ from scapy.all import sniff
 from data.models import Device, Packet, Notification, Setting
 from datetime import datetime
 from collections import defaultdict
+import pyshark
+from scapy.layers.inet import IP, TCP, UDP
 
 def get_packets_func():
     packets = []
@@ -82,25 +84,40 @@ def check_dos_attack(request):
 def calculate_parameters(request):
     devices = Device.objects.filter(
         is_active=True,
-        training_minutes__lt= Setting.objects.first().training_minutes      
+        training_minutes__lt=Setting.objects.first().training_minutes      
     )
     
     if not devices.exists():
         return JsonResponse({'message': "There are no active devices in the network"}, status=404)
         
     for device in devices:
-        # Replace direct packet capture with database query
+        # Get all packets for this device
         packets = device.packet_set.all()
         
-        total_bits = sum(packet.bytes_transferred * 8 for packet in packets)  # Convert bytes to bits
+        # Calculate basic metrics
+        total_bits = sum(packet.bytes_transferred * 8 for packet in packets)
         num_packets = packets.count()
+        
+        # Protocol tracking - just use the protocol numbers
+        protocol_counts = defaultdict(int)
+        for packet in packets:
+            try:
+                protocol = str(packet.protocol)  # Convert to string for consistency
+                protocol_counts[protocol] += 1
+            except Exception as e:
+                print(f"Error processing protocol: {e}")
+                continue
 
+        # Update device metrics
         bps = total_bits / 60
         pps = num_packets / 60
         
         device.volume = max(bps, device.volume)
         device.speed = max(pps, device.speed)
         device.training_minutes += 1
+        
+        # Update protocols
+        device.update_protocols(dict(protocol_counts))
         
         if device.training_minutes >= Setting.objects.first().training_minutes:
             device.is_trained = True
@@ -109,12 +126,13 @@ def calculate_parameters(request):
     
         device.save()
         
-        # Delete all packets for this device after calculations
+        # Delete processed packets
         device.packet_set.all().delete()
         
     return JsonResponse({
         "status": "success",
         "processed_devices": len(devices),
+        "protocols_detected": list(protocol_counts.keys())
     })
 
 def store_captured_packets():

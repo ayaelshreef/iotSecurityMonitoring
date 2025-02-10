@@ -52,7 +52,16 @@ class Device(models.Model):
     number_of_users = models.IntegerField(default=1)
     training_minutes = models.IntegerField(default=0)
     is_trained = models.BooleanField(default=False)
+    traffic_volume = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
+    protocols = models.JSONField(default=dict)  # New field to store protocol counts
     
+    def update_protocols(self, new_protocols):
+        current_protocols = self.protocols or {}
+        for protocol, count in new_protocols.items():
+            current_protocols[protocol] = current_protocols.get(protocol, 0) + count
+        self.protocols = current_protocols
+        self.save()
+
 class Setting(models.Model):
     training_minutes = models.IntegerField(default=60)
 

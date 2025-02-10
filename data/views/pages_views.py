@@ -13,8 +13,10 @@ def home(request):
                 'ip': device.ip_address,
                 'volume': device.volume,
                 'speed': device.speed,
+                'traffic_volume': float(device.traffic_volume),
                 'is_active': device.is_active,
-                'id': device.id  # Add id for update/delete operations
+                'id': device.id,
+                'protocols': device.protocols  # Add protocols to the response
             } for device in devices
         ]
         return JsonResponse({'devices': devices_data})
