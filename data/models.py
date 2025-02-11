@@ -2,6 +2,7 @@ from django.db import models
     
 class Device(models.Model):
     ip_address = models.GenericIPAddressField()
+    name = models.CharField(max_length=255, null=True, blank=True)
     mac_address = models.CharField(max_length=225, null=True)
     volume = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
     speed = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
@@ -25,6 +26,11 @@ class Device(models.Model):
             current_ips[ip] = current_ips.get(ip, 0) + 1
         self.connected_ips = current_ips
         self.save()
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = self.ip_address
+        super().save(*args, **kwargs)
 
 class Setting(models.Model):
     training_minutes = models.IntegerField(default=60)

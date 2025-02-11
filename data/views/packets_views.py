@@ -15,28 +15,23 @@ filter_ip_address = None
 captured_packets = []
 
 def packets_view(request, ip_address):
-
-    global filter_ip_address
-    filter_ip_address = ip_address
-    
-    # Check if IP exists in active devices
-    device = Device.objects.get(ip_address=ip_address, is_active=True)
-    
-    if not Device.objects.filter(ip_address=ip_address, is_active=True).exists():
-        return render(request, 'packets.html', {
-            'error_message': f"No active device found with IP: {ip_address}",
-            'ip_address': None
-        })
-
-    return render(request, 'packets.html', {
-        'ip_address': ip_address,
-        'mac_address': device.mac_address,
-        'volume': device.volume,
-        'speed': device.speed,
-        'protocols': device.protocols,
-        'connected_ips': device.connected_ips,
-        'number_of_users': device.number_of_users
-    })
+    try:
+        device = Device.objects.get(ip_address=ip_address, is_active=True)
+        context = {
+            'ip_address': ip_address,
+            'device': device,  # Make sure this is included
+            'volume': device.volume,
+            'speed': device.speed,
+            'protocols': device.protocols,
+            'connected_ips': device.connected_ips,
+            'number_of_users': device.number_of_users
+        }
+        return render(request, 'packets.html', context)
+    except Device.DoesNotExist:
+        context = {
+            'error_message': f'No device found with IP address {ip_address}'
+        }
+        return render(request, 'packets.html', context)
 
 def start_sniffer_view(request):
     global sniffer_thread

@@ -10,10 +10,11 @@ def home(request):
         devices = Device.objects.all()
         devices_data = [
             {
-                'ip': device.ip_address,
-                'is_active': device.is_active,
                 'id': device.id,
-                'number_of_users': device.number_of_users  # Add number of users
+                'ip': device.ip_address,
+                'name': device.name,
+                'is_active': device.is_active,
+                'number_of_users': device.number_of_users,
             } for device in devices
         ]
         return JsonResponse({'devices': devices_data})
@@ -63,4 +64,38 @@ def delete_device(request, device_id):
         return JsonResponse({'status': 'success'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-    
+
+def update_device(request, device_id):
+    if request.method == 'POST':
+        try:
+            device = Device.objects.get(id=device_id)
+            data = json.loads(request.body)
+            
+            # Update device fields
+            if 'name' in data:
+                device.name = data['name']
+            if 'number_of_users' in data:
+                device.number_of_users = data['number_of_users']
+            
+            device.save()
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Device updated successfully'
+            })
+            
+        except Device.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Device not found'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+            
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Invalid request method'
+    }, status=405)

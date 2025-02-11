@@ -36,15 +36,8 @@
 <template id="edit-form-template">
     <div class="edit-form p-3">
         <div class="form-group">
-            <label>IP Address:</label>
-            <input type="text" class="form-control" id="edit-ip">
-        </div>
-        <div class="form-group">
-            <label>Status:</label>
-            <select class="form-control" id="edit-status">
-                <option value="true">Active</option>
-                <option value="false">Inactive</option>
-            </select>
+            <label>Name:</label>
+            <input type="text" class="form-control" id="edit-name">
         </div>
         <div class="form-group">
             <label>Number of Users:</label>
@@ -64,6 +57,7 @@
 {% block extra_js %}
 <script>
     function loadActiveDevices() {
+        console.log('Loading devices...');
         fetch("/", {
             method: 'GET',
             headers: {
@@ -72,11 +66,14 @@
         })
         .then(response => response.json())
         .then(data => {
+            console.log('Received data:', data);
             const deviceList = document.getElementById('devices-container');
             deviceList.innerHTML = '';
 
             if (data.devices && data.devices.length > 0) {
+                console.log(`Found ${data.devices.length} devices`);
                 data.devices.forEach(function(device) {
+                    console.log('Processing device:', device);
                     const template = document.getElementById('device-template');
                     if (!template) {
                         console.error('Template not found!');
@@ -87,7 +84,7 @@
                     // Set device information
                     const link = clone.querySelector('.device-link');
                     link.href = `/packets/${device.ip}/`;
-                    link.textContent = device.ip;
+                    link.textContent = device.name || device.ip;  // Show name instead of IP
 
                     const status = clone.querySelector('.device-status');
                     status.classList.add(device.is_active ? 'badge-success' : 'badge-secondary');
@@ -103,6 +100,7 @@
                     deviceList.appendChild(clone);
                 });
             } else {
+                console.log('No devices found');
                 const template = document.getElementById('no-devices-template');
                 const clone = template.content.cloneNode(true);
                 deviceList.appendChild(clone);
@@ -131,16 +129,14 @@
     $(document).on('click', '.edit-device', function() {
         const deviceId = $(this).data('id');
         const listItem = $(this).closest('li');
-        const deviceIp = listItem.find('.device-link').text();
-        const isActive = listItem.find('.device-status').hasClass('badge-success');
+        const name = listItem.find('.device-name').text() || listItem.find('.device-link').text();
         const users = parseInt(listItem.find('.users-display').text().match(/\d+/)[0]);
 
         const template = document.getElementById('edit-form-template');
         const clone = document.importNode(template.content, true);
 
         // Set form values
-        clone.querySelector('#edit-ip').value = deviceIp;
-        clone.querySelector('#edit-status').value = isActive.toString();
+        clone.querySelector('#edit-name').value = name;
         clone.querySelector('#edit-users').value = users;
         clone.querySelector('.save-edit').dataset.id = deviceId;
 
@@ -151,8 +147,7 @@
     $(document).on('click', '.save-edit', function() {
         const deviceId = $(this).data('id');
         const newData = {
-            ip_address: $('#edit-ip').val(),
-            is_active: $('#edit-status').val() === 'true',
+            name: $('#edit-name').val().trim(),
             number_of_users: parseInt($('#edit-users').val())
         };
         
@@ -164,13 +159,22 @@
             },
             body: JSON.stringify(newData)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.status === 'success') {
                 loadActiveDevices();  // Refresh the list
             } else {
-                alert('Error updating device');
+                alert(data.message || 'Error updating device');
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating device');
         });
     });
 
