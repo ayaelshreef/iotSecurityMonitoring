@@ -21,7 +21,6 @@
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <a href="" class="device-link"></a>
-                <span class="device-status badge ml-2"></span>
                 <span class="badge badge-dark badge-pill users-display ml-2"></span>
             </div>
             <div>
@@ -84,11 +83,7 @@
                     // Set device information
                     const link = clone.querySelector('.device-link');
                     link.href = `/packets/${device.ip}/`;
-                    link.textContent = device.name || device.ip;  // Show name instead of IP
-
-                    const status = clone.querySelector('.device-status');
-                    status.classList.add(device.is_active ? 'badge-success' : 'badge-secondary');
-                    status.textContent = device.is_active ? 'Active' : 'Inactive';
+                    link.textContent = device.name || device.ip;
 
                     // Set number of users
                     clone.querySelector('.users-display').textContent = `Users: ${device.number_of_users}`;

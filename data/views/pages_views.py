@@ -7,7 +7,8 @@ import json
 
 def home(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        devices = Device.objects.all()
+        # Filter only active devices
+        devices = Device.objects.filter(is_active=True)
         devices_data = [
             {
                 'id': device.id,
