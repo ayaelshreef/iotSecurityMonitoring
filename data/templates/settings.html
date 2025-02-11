@@ -118,6 +118,100 @@
     .settings-section.active {
         display: block;
     }
+
+    /* Reports styles */
+    .device-report {
+        margin-bottom: 2rem;
+        border: 1px solid #eee;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .device-header {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+    }
+
+    .device-header:hover {
+        background-color: #e9ecef;
+    }
+
+    .device-content {
+        padding: 1rem;
+        display: none;
+    }
+
+    .device-content.active {
+        display: block;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .info-item {
+        background-color: #f8f9fa;
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .device-notifications {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+    }
+
+    .protocol-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .protocol-item {
+        background-color: #e9ecef;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.8rem;
+    }
+
+    .connected-ips {
+        margin-top: 1rem;
+    }
+
+    .ip-list {
+        max-height: 150px;
+        overflow-y: auto;
+        margin-top: 0.5rem;
+    }
+
+    .ip-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.25rem 0;
+        font-size: 0.9rem;
+    }
+
+    .export-btn {
+        float: right;
+        margin-bottom: 1rem;
+    }
 </style>
 {% endblock %}
 
@@ -132,6 +226,7 @@
                 <ul class="settings-nav-list">
                     <li class="settings-nav-item active" data-section="configuration">Configuration</li>
                     <li class="settings-nav-item" data-section="logs">Notification Logs</li>
+                    <li class="settings-nav-item" data-section="reports">Reports</li>
                 </ul>
             </div>
 
@@ -181,7 +276,110 @@
                         </div>
                         {% empty %}
                         <div class="text-center text-muted py-4">
-                            No notifications found
+                            No activites found
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Reports -->
+                <div id="reports" class="settings-section settings-card">
+                    <h2>Device Reports</h2>
+                    <button class="btn btn-primary export-btn" id="exportReports">
+                        <i class="fas fa-download"></i> Export Reports
+                    </button>
+                    <div class="device-reports">
+                        {% for device in devices %}
+                        <div class="device-report">
+                            <div class="device-header" data-device="{{ device.id }}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3 class="h5 mb-0">{{ device.name }} ({{ device.ip_address }})</h3>
+                                    <span class="badge {% if device.is_active %}badge-success{% else %}badge-secondary{% endif %}">
+                                        {{ device.is_active|yesno:"Active,Inactive" }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="device-content" id="device-{{ device.id }}-content">
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <div class="info-label">MAC Address</div>
+                                        <div class="info-value">{{ device.mac_address|default:"Not available" }}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Number of Users</div>
+                                        <div class="info-value">{{ device.number_of_users }}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Volume</div>
+                                        <div class="info-value">{{ device.volume|floatformat:2 }}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Speed</div>
+                                        <div class="info-value">{{ device.speed|floatformat:2 }}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Training Status</div>
+                                        <div class="info-value">{{ device.is_trained|yesno:"Trained,Not Trained" }}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Training Minutes</div>
+                                        <div class="info-value">{{ device.training_minutes }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="protocols-section">
+                                    <h4 class="h6">Protocols Used</h4>
+                                    <div class="protocol-list">
+                                        {% for protocol, count in device.protocols.items %}
+                                        <div class="protocol-item">
+                                            {{ protocol }}: {{ count }}
+                                        </div>
+                                        {% empty %}
+                                        <div class="text-muted">No protocol data available</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div class="connected-ips">
+                                    <h4 class="h6">Connected IPs</h4>
+                                    <div class="ip-list">
+                                        {% for ip, count in device.connected_ips.items %}
+                                        <div class="ip-item">
+                                            <span>{{ ip }}</span>
+                                            <span class="text-muted">{{ count }} connections</span>
+                                        </div>
+                                        {% empty %}
+                                        <div class="text-muted">No connection data available</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div class="device-notifications">
+                                    <h4 class="h6">Suspicious activity logs</h4>
+                                    {% for notification in device.notifications %}
+                                    <div class="notification-item">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div class="notification-time">
+                                                {{ notification.timestamp|date:"Y-m-d H:i:s" }}
+                                                {% if notification.type %}
+                                                <span class="notification-type">{{ notification.type }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="notification-message">{{ notification.message }}</div>
+                                        {% if notification.details %}
+                                        <div class="notification-details">{{ notification.details }}</div>
+                                        {% endif %}
+                                    </div>
+                                    {% empty %}
+                                    <div class="text-muted">No activities for this device</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center text-muted py-4">
+                            No devices found
                         </div>
                         {% endfor %}
                     </div>
@@ -232,6 +430,43 @@
             // Show corresponding section
             const sectionId = $(this).data('section');
             $(`#${sectionId}`).addClass('active');
+        });
+
+        // Handle device header clicks
+        $('.device-header').on('click', function () {
+            const deviceId = $(this).data('device');
+            $(`#device-${deviceId}-content`).slideToggle();
+        });
+
+        // Handle export reports
+        $('#exportReports').on('click', function () {
+            // Show loading state
+            const $btn = $(this);
+            const originalText = $btn.html();
+            $btn.html('<i class="fas fa-spinner fa-spin"></i> Generating PDF...').prop('disabled', true);
+
+            // Make request for PDF
+            fetch('/api/settings/export-reports/', {
+                method: 'GET',
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                // Create a link to download the PDF
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'device-reports.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(() => {
+                alert('Error generating PDF report');
+            })
+            .finally(() => {
+                // Restore button state
+                $btn.html(originalText).prop('disabled', false);
+            });
         });
     });
 </script>

@@ -25,14 +25,24 @@ def settings_view(request):
     # Get all notifications ordered by timestamp
     notifications = Notification.objects.all().order_by('-timestamp')
     
-    # Get the current training minutes from any device (assuming all devices have the same training time)
-    current_training_minutes = Setting.objects.first().training_minutes
+    # Get all devices with their related notifications
+    devices = Device.objects.all()
+    
+    # Get the current training minutes from settings
+    current_training_minutes = Setting.objects.first().training_minutes if Setting.objects.exists() else 60
+    
+    # Prepare devices with their related notifications
+    for device in devices:
+        device.notifications = Notification.objects.filter(
+            message__icontains=device.ip_address
+        ).order_by('-timestamp')
     
     context = {
         'notifications': notifications,
-        'current_training_minutes': current_training_minutes
+        'current_training_minutes': current_training_minutes,
+        'devices': devices
     }
-
+    
     return render(request, 'settings.html', context)
 
 @require_http_methods(["POST"])
