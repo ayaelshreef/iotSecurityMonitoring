@@ -35,6 +35,7 @@ def packets_view(request, ip_address):
         'speed': device.speed,
         'protocols': device.protocols,
         'connected_ips': device.connected_ips,
+        'number_of_users': device.number_of_users
     })
 
 def start_sniffer_view(request):

@@ -72,8 +72,12 @@
 <body>
     <div class="container">
 
-        <header class="header">
+        <header class="header d-flex justify-content-between align-items-center">
             <h1 class="h3">Captured Packets for {{ ip_address }}</h1>
+            <div>
+                <button class="btn btn-warning" id="editDevice">Edit Device</button>
+                <button class="btn btn-danger" id="deleteDevice">Delete Device</button>
+            </div>
         </header>
 
         {% if error_message %}
@@ -81,9 +85,31 @@
             {{ error_message }}
         </div>
         {% else %}
+        <!-- Add edit form (initially hidden) -->
+        <div id="editForm" class="statistics-box" style="display: none;">
+            <h3 class="h5">Edit Device</h3>
+            <div class="form-group">
+                <label>IP Address:</label>
+                <input type="text" class="form-control" id="edit-ip" value="{{ ip_address }}">
+            </div>
+            <div class="form-group">
+                <label>Status:</label>
+                <select class="form-control" id="edit-status">
+                    <option value="true" {% if device.is_active %}selected{% endif %}>Active</option>
+                    <option value="false" {% if not device.is_active %}selected{% endif %}>Inactive</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Number of Users:</label>
+                <input type="number" class="form-control" id="edit-users" value="{{ device.number_of_users }}" min="1">
+            </div>
+            <button class="btn btn-primary" id="saveEdit">Save</button>
+            <button class="btn btn-secondary" id="cancelEdit">Cancel</button>
+        </div>
         <div class="statistics-box" id="statistics-box">
             <div class="stat-item" id="volume-display">Volume: <span id="volume-value">{{ volume|default:'--' }}</span></div>
             <div class="stat-item" id="speed-display">Speed: <span id="speed-value">{{ speed|default:'--' }}</span></div>
+            <div class="stat-item" id="users-display">Number of Users: <span id="users-value">{{ number_of_users }}</span></div>
             <div class="stat-item" id="protocols-display">
                 <div>Protocols:</div>
                 <div id="protocols-list" class="mt-2">
@@ -207,6 +233,77 @@
         // Fetch packets every 10 seconds
         const fetchInterval = setInterval(() => fetchPackets(ipAddress), 2000);
 
+        // Edit Device
+        $('#editDevice').click(function() {
+            $('#editForm').show();
+            $('#statistics-box').hide();
+        });
+
+        $('#cancelEdit').click(function() {
+            $('#editForm').hide();
+            $('#statistics-box').show();
+        });
+
+        $('#saveEdit').click(function() {
+            const newData = {
+                ip_address: $('#edit-ip').val(),
+                is_active: $('#edit-status').val() === 'true',
+                number_of_users: parseInt($('#edit-users').val())
+            };
+            
+            fetch(`/api/devices/{{ device.id }}/update/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(newData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.reload();  // Refresh the page
+                } else {
+                    alert('Error updating device');
+                }
+            });
+        });
+
+        // Delete Device
+        $('#deleteDevice').click(function() {
+            if (confirm('Are you sure you want to delete this device?')) {
+                fetch(`/api/devices/{{ device.id }}/delete/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.href = '/';  // Redirect to home page
+                    } else {
+                        alert('Error deleting device');
+                    }
+                });
+            }
+        });
+
+        // CSRF token helper function
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
     </script>
     {% endblock %}
 </body>

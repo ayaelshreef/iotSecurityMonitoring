@@ -1,63 +1,124 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <header class="header d-flex justify-content-between align-items-center">
     <h1 class="h3">IoT Security Monitor</h1>
     <button id="scanDevices" class="btn btn-primary">Scan Devices</button>
 </header>
+
 <main>
     <section id="deviceList" class="device-list">
         <h2 class="h5">Devices:</h2>
-        <ul class="list-group"></ul>
+        <ul class="list-group" id="devices-container">
+            <!-- Devices will be inserted here -->
+        </ul>
     </section>
 </main>
+
+<!-- Device Template -->
+<template id="device-template">
+    <li class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <a href="" class="device-link"></a>
+                <span class="device-status badge ml-2"></span>
+                <span class="badge badge-dark badge-pill users-display ml-2"></span>
+            </div>
+            <div>
+                <button class="btn btn-sm btn-warning edit-device">Edit</button>
+                <button class="btn btn-sm btn-danger delete-device ml-2">Delete</button>
+            </div>
+        </div>
+    </li>
+</template>
+
+<!-- Edit Form Template -->
+<template id="edit-form-template">
+    <div class="edit-form p-3">
+        <div class="form-group">
+            <label>IP Address:</label>
+            <input type="text" class="form-control" id="edit-ip">
+        </div>
+        <div class="form-group">
+            <label>Status:</label>
+            <select class="form-control" id="edit-status">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Number of Users:</label>
+            <input type="number" class="form-control" id="edit-users" min="1">
+        </div>
+        <button class="btn btn-primary save-edit">Save</button>
+        <button class="btn btn-secondary cancel-edit">Cancel</button>
+    </div>
+</template>
+
+<!-- No Devices Template -->
+<template id="no-devices-template">
+    <li class="list-group-item text-center">No devices found.</li>
+</template>
 {% endblock %}
+
 {% block extra_js %}
 <script>
-    // Function to load active devices
     function loadActiveDevices() {
-        fetch("/", {  // Include the IP address in the URL
+        fetch("/", {
             method: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             },
         })
-            .then(response => response.json())
-            .then(data => {                // Clear the current list
-                $('#deviceList .list-group').empty();
+        .then(response => response.json())
+        .then(data => {
+            const deviceList = document.getElementById('devices-container');
+            deviceList.innerHTML = '';
 
-                if (data.devices && data.devices.length > 0) {
-                    data.devices.forEach(function (device) {
-                        const statusClass = device.is_active ? 'badge-success' : 'badge-secondary';
-                        const statusText = device.is_active ? 'Active' : 'Inactive';
-                        
-                        $('#deviceList .list-group').append(`
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <a href="/packets/${device.ip}/">${device.ip}</a>
-                                    <span class="badge ${statusClass} ml-2">${statusText}</span>
-                                </div>
-                                <div>
-                                    <button class="btn btn-sm btn-warning ml-2 edit-device" data-id="${device.id}">Edit</button>
-                                    <button class="btn btn-sm btn-danger ml-2 delete-device" data-id="${device.id}">Delete</button>
-                                </div>
-                            </li>
-                        `);
-                    });
-                } else {
-                    $('#deviceList .list-group').append(
-                        '<li class="list-group-item text-center">No devices found.</li>'
-                    );
-                }
-            })
-           
+            if (data.devices && data.devices.length > 0) {
+                data.devices.forEach(function(device) {
+                    const template = document.getElementById('device-template');
+                    if (!template) {
+                        console.error('Template not found!');
+                        return;
+                    }
+                    const clone = template.content.cloneNode(true);
+                    
+                    // Set device information
+                    const link = clone.querySelector('.device-link');
+                    link.href = `/packets/${device.ip}/`;
+                    link.textContent = device.ip;
+
+                    const status = clone.querySelector('.device-status');
+                    status.classList.add(device.is_active ? 'badge-success' : 'badge-secondary');
+                    status.textContent = device.is_active ? 'Active' : 'Inactive';
+
+                    // Set number of users
+                    clone.querySelector('.users-display').textContent = `Users: ${device.number_of_users}`;
+
+                    // Set button data
+                    clone.querySelector('.edit-device').dataset.id = device.id;
+                    clone.querySelector('.delete-device').dataset.id = device.id;
+
+                    deviceList.appendChild(clone);
+                });
+            } else {
+                const template = document.getElementById('no-devices-template');
+                const clone = template.content.cloneNode(true);
+                deviceList.appendChild(clone);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading devices:', error);
+        });
     }
 
-    // Load devices when page loads
-    loadActiveDevices();
+    // Initial load
+    $(document).ready(function() {
+        loadActiveDevices();
+    });
 
-    // Scan button click handler
+    // Scan button handler
     $('#scanDevices').click(function() {
         $(this).prop('disabled', true).text('Scanning...');
         loadActiveDevices();
@@ -70,30 +131,20 @@
     $(document).on('click', '.edit-device', function() {
         const deviceId = $(this).data('id');
         const listItem = $(this).closest('li');
-        const deviceIp = listItem.find('a').text();
-        const isActive = listItem.find('.badge').hasClass('badge-success');
-        
-        // Create a simple form for editing
-        const editForm = `
-            <div class="edit-form p-3">
-                <div class="form-group">
-                    <label>IP Address:</label>
-                    <input type="text" class="form-control" id="edit-ip" value="${deviceIp}">
-                </div>
-                <div class="form-group">
-                    <label>Status:</label>
-                    <select class="form-control" id="edit-status">
-                        <option value="true" ${isActive ? 'selected' : ''}>Active</option>
-                        <option value="false" ${!isActive ? 'selected' : ''}>Inactive</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary save-edit" data-id="${deviceId}">Save</button>
-                <button class="btn btn-secondary cancel-edit">Cancel</button>
-            </div>
-        `;
-        
-        // Replace the list item content with the form
-        listItem.html(editForm);
+        const deviceIp = listItem.find('.device-link').text();
+        const isActive = listItem.find('.device-status').hasClass('badge-success');
+        const users = parseInt(listItem.find('.users-display').text().match(/\d+/)[0]);
+
+        const template = document.getElementById('edit-form-template');
+        const clone = document.importNode(template.content, true);
+
+        // Set form values
+        clone.querySelector('#edit-ip').value = deviceIp;
+        clone.querySelector('#edit-status').value = isActive.toString();
+        clone.querySelector('#edit-users').value = users;
+        clone.querySelector('.save-edit').dataset.id = deviceId;
+
+        listItem.html(clone);
     });
 
     // Save edit handler
@@ -101,7 +152,8 @@
         const deviceId = $(this).data('id');
         const newData = {
             ip_address: $('#edit-ip').val(),
-            is_active: $('#edit-status').val() === 'true'
+            is_active: $('#edit-status').val() === 'true',
+            number_of_users: parseInt($('#edit-users').val())
         };
         
         fetch(`/api/devices/${deviceId}/update/`, {
