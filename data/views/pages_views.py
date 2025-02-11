@@ -11,9 +11,6 @@ def home(request):
         devices_data = [
             {
                 'ip': device.ip_address,
-                'volume': device.volume,
-                'speed': device.speed,
-                'traffic_volume': float(device.traffic_volume),
                 'is_active': device.is_active,
                 'id': device.id,
                 'protocols': device.protocols  # Add protocols to the response

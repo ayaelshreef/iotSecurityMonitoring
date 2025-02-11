@@ -29,8 +29,6 @@
 
                 if (data.devices && data.devices.length > 0) {
                     data.devices.forEach(function (device) {
-                        const volumeDisplay = device.volume == 0 ? '--' : device.volume;
-                        const speedDisplay = device.speed == 0 ? '--' : device.speed;
                         const statusClass = device.is_active ? 'badge-success' : 'badge-secondary';
                         const statusText = device.is_active ? 'Active' : 'Inactive';
                         
@@ -41,8 +39,6 @@
                                     <span class="badge ${statusClass} ml-2">${statusText}</span>
                                 </div>
                                 <div>
-                                    <span class="badge badge-primary badge-pill">Volume: ${volumeDisplay}</span>
-                                    <span class="badge badge-info badge-pill">Speed: ${speedDisplay}</span>
                                     <button class="btn btn-sm btn-warning ml-2 edit-device" data-id="${device.id}">Edit</button>
                                     <button class="btn btn-sm btn-danger ml-2 delete-device" data-id="${device.id}">Delete</button>
                                 </div>

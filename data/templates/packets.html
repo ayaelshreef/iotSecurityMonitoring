@@ -82,9 +82,24 @@
         </div>
         {% else %}
         <div class="statistics-box" id="statistics-box">
-            <div class="stat-item" id="volume-display">Volume: <span id="volume-value">{{ volume }}</span></div>
-            <div class="stat-item" id="speed-display">Speed: <span id="speed-value">{{ speed }}</span></div>
-            <!-- Add more stat items here in the future -->
+            <div class="stat-item" id="volume-display">Volume: <span id="volume-value">{{ volume|default:'--' }}</span></div>
+            <div class="stat-item" id="speed-display">Speed: <span id="speed-value">{{ speed|default:'--' }}</span></div>
+            <div class="stat-item" id="protocols-display">
+                <div>Protocols:</div>
+                <div id="protocols-list" class="mt-2">
+                    {% for protocol, count in protocols.items %}
+                    <span class="badge badge-info mr-1">{{ protocol }}: {{ count }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="stat-item" id="connected-ips-display">
+                <div>Connected IPs:</div>
+                <div id="connected-ips-list" class="mt-2">
+                    {% for ip, count in connected_ips.items %}
+                    <span class="badge badge-warning mr-1">{{ ip }}: {{ count }}</span>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
 
         <div class="button-container">

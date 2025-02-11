@@ -32,7 +32,9 @@ def packets_view(request, ip_address):
         'ip_address': ip_address,
         'mac_address': device.mac_address,
         'volume': device.volume,
-        'speed': device.speed
+        'speed': device.speed,
+        'protocols': device.protocols,
+        'connected_ips': device.connected_ips,
     })
 
 def start_sniffer_view(request):
