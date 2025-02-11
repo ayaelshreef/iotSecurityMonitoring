@@ -54,12 +54,20 @@ class Device(models.Model):
     is_trained = models.BooleanField(default=False)
     traffic_volume = models.DecimalField(max_digits=50, decimal_places=2, default=0.00)
     protocols = models.JSONField(default=dict)  # New field to store protocol counts
+    connected_ips = models.JSONField(default=dict)  # New field to store connected IPs and their counts
     
     def update_protocols(self, new_protocols):
         current_protocols = self.protocols or {}
         for protocol, count in new_protocols.items():
             current_protocols[protocol] = current_protocols.get(protocol, 0) + count
         self.protocols = current_protocols
+        self.save()
+
+    def update_connected_ips(self, new_ips):
+        current_ips = self.connected_ips or {}
+        for ip in new_ips:
+            current_ips[ip] = current_ips.get(ip, 0) + 1
+        self.connected_ips = current_ips
         self.save()
 
 class Setting(models.Model):

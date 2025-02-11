@@ -98,14 +98,25 @@ def calculate_parameters(request):
         total_bits = sum(packet.bytes_transferred * 8 for packet in packets)
         num_packets = packets.count()
         
-        # Protocol tracking - just use the protocol numbers
+        # Protocol tracking
         protocol_counts = defaultdict(int)
+        # Connected IPs tracking
+        connected_ips = set()
+        
         for packet in packets:
             try:
-                protocol = str(packet.protocol)  # Convert to string for consistency
+                # Track protocols
+                protocol = str(packet.protocol)
                 protocol_counts[protocol] += 1
+                
+                # Track connected IPs
+                if packet.src_ip != device.ip_address:
+                    connected_ips.add(packet.src_ip)
+                if packet.dst_ip != device.ip_address:
+                    connected_ips.add(packet.dst_ip)
+                    
             except Exception as e:
-                print(f"Error processing protocol: {e}")
+                print(f"Error processing packet: {e}")
                 continue
 
         # Update device metrics
@@ -116,8 +127,9 @@ def calculate_parameters(request):
         device.speed = max(pps, device.speed)
         device.training_minutes += 1
         
-        # Update protocols
+        # Update protocols and connected IPs
         device.update_protocols(dict(protocol_counts))
+        device.update_connected_ips(list(connected_ips))
         
         if device.training_minutes >= Setting.objects.first().training_minutes:
             device.is_trained = True
