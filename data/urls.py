@@ -27,6 +27,7 @@ urlpatterns = [
     path('packets/<str:ip_address>/', packets_views.packets_view),
     
     path('check/', dos_views.check_dos_attack),
+    path('scan/', scan_network_views.scan_network_devices),
 
     path('fetch-packets/<str:ip_address>/', packets_views.fetch_packets_view),
     path('start-sniffer/', packets_views.start_sniffer_view),

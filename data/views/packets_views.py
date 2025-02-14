@@ -16,6 +16,8 @@ captured_packets = []
 
 def packets_view(request, ip_address):
     try:
+        global filter_ip_address
+        filter_ip_address = ip_address    
         device = Device.objects.get(ip_address=ip_address, is_active=True)
         context = {
             'ip_address': ip_address,

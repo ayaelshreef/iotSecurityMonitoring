@@ -4,385 +4,381 @@
 
 {% block extra_css %}
 <style>
+    .settings-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .settings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
     .settings-card {
         background: white;
         border-radius: 0.5rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .settings-card-header {
+        background: #f8f9fa;
+        padding: 1.25rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .settings-card-header h2 {
+        font-size: 1.25rem;
+        margin: 0;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .settings-card-header i {
+        color: #507687;
+        font-size: 1.25rem;
+    }
+
+    .settings-card-body {
         padding: 1.5rem;
     }
 
-    .settings-card h2 {
-        color: #507687;
-        font-size: 1.5rem;
+    .form-group {
         margin-bottom: 1.5rem;
     }
 
-    .form-group label {
+    .form-label {
+        display: block;
         font-weight: 500;
-        color: #4a4a4a;
+        color: #374151;
+        margin-bottom: 0.5rem;
     }
 
-    .notification-log {
-        max-height: 500px;
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #507687;
+        box-shadow: 0 0 0 2px rgba(80, 118, 135, 0.1);
+        outline: none;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-primary {
+        background: transparent;
+        color: #507687;
+        border: 1px solid #507687;
+    }
+
+    .btn-primary:hover {
+        background: #f8f9fa;
+        color: #456a77;
+        border-color: #456a77;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .notification-list {
+        max-height: 400px;
         overflow-y: auto;
     }
 
     .notification-item {
         padding: 1rem;
-        border-bottom: 1px solid #eee;
-        transition: background-color 0.2s;
-    }
-
-    .notification-item:hover {
-        background-color: #f8f9fa;
+        border-bottom: 1px solid #e5e7eb;
     }
 
     .notification-time {
-        color: #666;
-        font-size: 0.9rem;
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-bottom: 0.25rem;
     }
 
     .notification-message {
-        margin-top: 0.5rem;
+        color: #374151;
     }
 
-    .notification-details {
-        margin-top: 0.5rem;
-        font-size: 0.9rem;
-        color: #666;
+    .device-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
     }
 
-    .notification-type {
-        display: inline-block;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-size: 0.8rem;
-        margin-left: 0.5rem;
-        background-color: #e9ecef;
+    .stat-card {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        text-align: center;
+        border: 1px solid #e5e7eb;
     }
 
-    .save-btn {
-        background-color: #507687;
-        border-color: #507687;
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #507687;
+        margin-bottom: 0.25rem;
     }
 
-    .save-btn:hover {
-        background-color: #456a77;
-        border-color: #456a77;
+    .stat-label {
+        font-size: 0.875rem;
+        color: #6b7280;
     }
 
-    /* New styles for the side navigation */
-    .settings-container {
+    .report-item {
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .report-header {
         display: flex;
-        gap: 2rem;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
     }
 
-    .settings-nav {
-        width: 250px;
-        flex-shrink: 0;
-    }
-
-    .settings-nav-list {
-        list-style: none;
-        padding: 0;
+    .device-name {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #374151;
         margin: 0;
     }
 
-    .settings-nav-item {
-        padding: 1rem;
-        cursor: pointer;
-        border-radius: 0.5rem;
-        margin-bottom: 0.5rem;
-        color: #4a4a4a;
-        transition: background-color 0.2s;
+    .device-ip {
+        font-size: 0.875rem;
+        color: #6b7280;
     }
 
-    .settings-nav-item:hover {
-        background-color: #f8f9fa;
+    .device-status {
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
     }
 
-    .settings-nav-item.active {
-        background-color: #507687;
-        color: white !important;
+    .status-active {
+        background: #10B981;
+        color: white;
     }
 
-    .settings-content {
-        flex-grow: 1;
+    .status-inactive {
+        background: #6B7280;
+        color: white;
     }
 
-    .settings-section {
-        display: none;
-    }
-
-    .settings-section.active {
-        display: block;
-    }
-
-    /* Reports styles */
-    .device-report {
-        margin-bottom: 2rem;
-        border: 1px solid #eee;
-        border-radius: 0.5rem;
-        overflow: hidden;
-    }
-
-    .device-header {
-        background-color: #f8f9fa;
-        padding: 1rem;
-        border-bottom: 1px solid #eee;
-        cursor: pointer;
-    }
-
-    .device-header:hover {
-        background-color: #e9ecef;
-    }
-
-    .device-content {
-        padding: 1rem;
-        display: none;
-    }
-
-    .device-content.active {
-        display: block;
-    }
-
-    .info-grid {
+    .report-details {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1rem;
         margin-bottom: 1rem;
     }
 
-    .info-item {
-        background-color: #f8f9fa;
-        padding: 0.75rem;
-        border-radius: 0.25rem;
-    }
-
-    .info-label {
-        font-size: 0.8rem;
-        color: #666;
-        margin-bottom: 0.25rem;
-    }
-
-    .info-value {
-        font-weight: 500;
-        color: #333;
-    }
-
-    .device-notifications {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid #eee;
-    }
-
-    .protocol-list {
+    .detail-item {
         display: flex;
-        flex-wrap: wrap;
+        align-items: center;
         gap: 0.5rem;
-        margin-top: 0.5rem;
-    }
-
-    .protocol-item {
-        background-color: #e9ecef;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-size: 0.8rem;
-    }
-
-    .connected-ips {
-        margin-top: 1rem;
-    }
-
-    .ip-list {
-        max-height: 150px;
-        overflow-y: auto;
-        margin-top: 0.5rem;
-    }
-
-    .ip-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.25rem 0;
+        color: #4B5563;
         font-size: 0.9rem;
     }
 
-    .export-btn {
-        float: right;
-        margin-bottom: 1rem;
+    .detail-item i {
+        color: #507687;
+    }
+
+    .report-actions {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    .btn-outline-primary {
+        color: #507687;
+        border: 1px solid #507687;
+        background: transparent;
+    }
+
+    .btn-outline-primary:hover {
+        background: #507687;
+        color: white;
+    }
+
+    .btn-outline-secondary {
+        color: #6B7280;
+        border: 1px solid #6B7280;
+        background: transparent;
+    }
+
+    .btn-outline-secondary:hover {
+        background: #6B7280;
+        color: white;
+    }
+
+    .btn-sm {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .settings-card-body .btn-container {
+        margin-top: 1.5rem;
+    }
+
+    .stat-card-actions .btn-primary,
+    .settings-card-body .btn-primary {
+        background: transparent;
+        color: #507687;
+        border: 1px solid #507687;
+        font-weight: 500;
+    }
+
+    .stat-card-actions .btn-primary:hover,
+    .settings-card-body .btn-primary:hover {
+        background: #f8f9fa;
+        color: #456a77;
+        border-color: #456a77;
+    }
+
+    @media (max-width: 768px) {
+        .settings-container {
+            padding: 1rem;
+        }
+        
+        .settings-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="row mt-4">
-    <div class="col-12">
-        <h1 class="h3 mb-4">Settings</h1>
+<div class="settings-container">
+    <h1 class="h3 mb-4">System Settings</h1>
 
-        <div class="settings-container">
-            <!-- Side Navigation -->
-            <div class="settings-nav">
-                <ul class="settings-nav-list">
-                    <li class="settings-nav-item active" data-section="configuration">Configuration</li>
-                    <li class="settings-nav-item" data-section="logs">Notification Logs</li>
-                    <li class="settings-nav-item" data-section="reports">Reports</li>
-                </ul>
+    <div class="settings-grid">
+        <!-- Training Configuration Card -->
+        <div class="settings-card">
+            <div class="settings-card-header">
+                <h2><i class="fas fa-cog"></i>Training Configuration</h2>
             </div>
-
-            <!-- Content Area -->
-            <div class="settings-content">
-                <!-- Training Configuration -->
-                <div id="configuration" class="settings-section settings-card active">
-                    <h2>Training Configuration</h2>
-                    <form id="trainingSettingsForm">
-                        <div class="form-group">
-                            <label for="trainingMinutes">Training Time (minutes)</label>
-                            <input type="number" class="form-control" id="trainingMinutes" name="trainingMinutes"
-                                min="1" value="{{ current_training_minutes }}" required>
-                            <small class="form-text text-muted">
-                                Set the duration for system training. Increasing this value will trigger additional
-                                training for the remaining time.
-                            </small>
-                        </div>
-                        <button type="submit" class="btn btn-primary save-btn">Save Changes</button>
-                    </form>
-                </div>
-
-                <!-- Notification Logs -->
-                <div id="logs" class="settings-section settings-card">
-                    <h2>Notification Logs</h2>
-                    <div class="notification-log">
-                        {% for notification in notifications %}
-                        <div class="notification-item">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div class="notification-time">
-                                    {{ notification.timestamp|date:"Y-m-d H:i:s" }}
-                                    {% if notification.type %}
-                                    <span class="notification-type">{{ notification.type }}</span>
-                                    {% endif %}
-                                </div>
-                                <div
-                                    class="badge {% if notification.is_read %}badge-secondary{% else %}badge-primary{% endif %}">
-                                    {{ notification.is_read|yesno:"Read,Unread" }}
-                                </div>
-                            </div>
-                            <div class="notification-message">{{ notification.message }}</div>
-                            {% if notification.details %}
-                            <div class="notification-details">
-                                {{ notification.details }}
-                            </div>
-                            {% endif %}
-                        </div>
-                        {% empty %}
-                        <div class="text-center text-muted py-4">
-                            No activites found
-                        </div>
-                        {% endfor %}
+            <div class="settings-card-body">
+                <form id="trainingSettingsForm">
+                    <div class="form-group">
+                        <label class="form-label">Training Duration (minutes)</label>
+                        <input type="number" class="form-control" id="trainingMinutes" 
+                               name="trainingMinutes" min="1" 
+                               value="{{ current_training_minutes }}" required>
+                        <small class="text-muted mt-2 d-block">
+                            Adjust the duration for system training
+                        </small>
                     </div>
-                </div>
-
-                <!-- Reports -->
-                <div id="reports" class="settings-section settings-card">
-                    <h2>Device Reports</h2>
-                    <button class="btn btn-primary export-btn" id="exportReports">
-                        <i class="fas fa-download"></i> Export Reports
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>Save Changes
                     </button>
-                    <div class="device-reports">
-                        {% for device in devices %}
-                        <div class="device-report">
-                            <div class="device-header" data-device="{{ device.id }}">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h3 class="h5 mb-0">{{ device.name }} ({{ device.ip_address }})</h3>
-                                    <span class="badge {% if device.is_active %}badge-success{% else %}badge-secondary{% endif %}">
-                                        {{ device.is_active|yesno:"Active,Inactive" }}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="device-content" id="device-{{ device.id }}-content">
-                                <div class="info-grid">
-                                    <div class="info-item">
-                                        <div class="info-label">MAC Address</div>
-                                        <div class="info-value">{{ device.mac_address|default:"Not available" }}</div>
-                                    </div>
-                                    <div class="info-item">
-                                        <div class="info-label">Number of Users</div>
-                                        <div class="info-value">{{ device.number_of_users }}</div>
-                                    </div>
-                                    <div class="info-item">
-                                        <div class="info-label">Volume</div>
-                                        <div class="info-value">{{ device.volume|floatformat:2 }}</div>
-                                    </div>
-                                    <div class="info-item">
-                                        <div class="info-label">Speed</div>
-                                        <div class="info-value">{{ device.speed|floatformat:2 }}</div>
-                                    </div>
-                                    <div class="info-item">
-                                        <div class="info-label">Training Status</div>
-                                        <div class="info-value">{{ device.is_trained|yesno:"Trained,Not Trained" }}</div>
-                                    </div>
-                                    <div class="info-item">
-                                        <div class="info-label">Training Minutes</div>
-                                        <div class="info-value">{{ device.training_minutes }}</div>
-                                    </div>
-                                </div>
+                </form>
+            </div>
+        </div>
 
-                                <div class="protocols-section">
-                                    <h4 class="h6">Protocols Used</h4>
-                                    <div class="protocol-list">
-                                        {% for protocol, count in device.protocols.items %}
-                                        <div class="protocol-item">
-                                            {{ protocol }}: {{ count }}
-                                        </div>
-                                        {% empty %}
-                                        <div class="text-muted">No protocol data available</div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-
-                                <div class="connected-ips">
-                                    <h4 class="h6">Connected IPs</h4>
-                                    <div class="ip-list">
-                                        {% for ip, count in device.connected_ips.items %}
-                                        <div class="ip-item">
-                                            <span>{{ ip }}</span>
-                                            <span class="text-muted">{{ count }} connections</span>
-                                        </div>
-                                        {% empty %}
-                                        <div class="text-muted">No connection data available</div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-
-                                <div class="device-notifications">
-                                    <h4 class="h6">Suspicious activity logs</h4>
-                                    {% for notification in device.notifications %}
-                                    <div class="notification-item">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div class="notification-time">
-                                                {{ notification.timestamp|date:"Y-m-d H:i:s" }}
-                                                {% if notification.type %}
-                                                <span class="notification-type">{{ notification.type }}</span>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        <div class="notification-message">{{ notification.message }}</div>
-                                        {% if notification.details %}
-                                        <div class="notification-details">{{ notification.details }}</div>
-                                        {% endif %}
-                                    </div>
-                                    {% empty %}
-                                    <div class="text-muted">No activities for this device</div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                        {% empty %}
-                        <div class="text-center text-muted py-4">
-                            No devices found
-                        </div>
-                        {% endfor %}
+        <!-- System Statistics Card -->
+        <div class="settings-card">
+            <div class="settings-card-header">
+                <h2><i class="fas fa-chart-line"></i>System Statistics</h2>
+            </div>
+            <div class="settings-card-body">
+                <div class="device-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ devices|length }}</div>
+                        <div class="stat-label">Active Devices</div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{ notifications|length }}</div>
+                        <div class="stat-label">Alerts</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="exportReports">
+                    <i class="fas fa-download"></i>Export Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent Notifications Card -->
+        <div class="settings-card">
+            <div class="settings-card-header">
+                <h2><i class="fas fa-bell"></i>Alerts History</h2>
+            </div>
+            <div class="settings-card-body">
+                <div class="notification-list">
+                    {% for notification in notifications|slice:":5" %}
+                    <div class="notification-item">
+                        <div class="notification-time">
+                            {{ notification.timestamp|date:"Y-m-d H:i:s" }}
+                        </div>
+                        <div class="notification-message">
+                            {{ notification.message }}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center text-muted py-4">
+                        No recent notifications
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Reports Card (Replacing Network Protocols) -->
+        <div class="settings-card">
+            <div class="settings-card-header">
+                <h2><i class="fas fa-file-alt"></i>Device Reports</h2>
+            </div>
+            <div class="settings-card-body">
+                <div class="reports-list">
+                    {% for device in devices %}
+                    <div class="report-item">
+                        <div class="report-header">
+                            <div class="device-info">
+                                <h3 class="device-name">{{ device }}</h3>
+                                <span class="device-ip text-muted">{{ device.ip_address }}</span>
+                            </div>
+                            <div class="device-status {% if device.is_active %}status-active{% else %}status-inactive{% endif %}">
+                                {{ device.is_active|yesno:"Active,Inactive" }}
+                            </div>
+                        </div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-outline-primary view-details" data-device-id="{{ device.id }}">
+                                <i class="fas fa-eye"></i>View Details
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary download-report" data-device-id="{{ device.id }}">
+                                <i class="fas fa-download"></i>Download Report
+                            </button>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-folder-open mb-3" style="font-size: 2rem;"></i>
+                        <p>No device reports available</p>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -418,26 +414,6 @@
             });
         });
 
-        // Handle navigation clicks
-        $('.settings-nav-item').on('click', function () {
-            // Remove active class from all items and sections
-            $('.settings-nav-item').removeClass('active');
-            $('.settings-section').removeClass('active');
-
-            // Add active class to clicked item
-            $(this).addClass('active');
-
-            // Show corresponding section
-            const sectionId = $(this).data('section');
-            $(`#${sectionId}`).addClass('active');
-        });
-
-        // Handle device header clicks
-        $('.device-header').on('click', function () {
-            const deviceId = $(this).data('device');
-            $(`#device-${deviceId}-content`).slideToggle();
-        });
-
         // Handle export reports
         $('#exportReports').on('click', function () {
             // Show loading state
@@ -465,6 +441,41 @@
             })
             .finally(() => {
                 // Restore button state
+                $btn.html(originalText).prop('disabled', false);
+            });
+        });
+
+        // View device details handler
+        $('.view-details').click(function() {
+            const deviceId = $(this).data('device-id');
+            window.location.href = `/devices/${deviceId}/details/`;
+        });
+
+        // Download individual device report handler
+        $('.download-report').click(function() {
+            const deviceId = $(this).data('device-id');
+            const $btn = $(this);
+            const originalText = $btn.html();
+            
+            $btn.html('<i class="fas fa-spinner fa-spin"></i>Downloading...').prop('disabled', true);
+
+            fetch(`/api/devices/${deviceId}/report/`, {
+                method: 'GET',
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `device-${deviceId}-report.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(() => {
+                alert('Error generating device report');
+            })
+            .finally(() => {
                 $btn.html(originalText).prop('disabled', false);
             });
         });
