@@ -24,20 +24,51 @@
         }
 
         .statistics-box {
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .stat-group {
+            background-color: #f8f9fa;
+            border-radius: 8px;
             padding: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            height: 100%;
+        }
+
+        .stat-header {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
         }
 
         .stat-item {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
+            margin-bottom: 12px;
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .badge {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+
+        .badge-info {
+            background-color: #3498db;
+        }
+
+        .badge-warning {
+            background-color: #f1c40f;
+            color: #2c3e50;
         }
 
         .packet-list {
@@ -104,23 +135,69 @@
             <button class="btn btn-secondary" id="cancelEdit">Cancel</button>
         </div>
         <div class="statistics-box" id="statistics-box">
-            <div class="stat-item" id="volume-display">Volume: <span id="volume-value">{{ volume|default:'--' }}</span> bps</div>
-            <div class="stat-item" id="speed-display">Speed: <span id="speed-value">{{ speed|default:'--' }}</span> pps</div>
-            <div class="stat-item" id="users-display">Number of Users: <span id="users-value">{{ number_of_users }}</span></div>
-            <div class="stat-item" id="protocols-display">
-                <div>Protocols:</div>
-                <div id="protocols-list" class="mt-2">
-                    {% for protocol, count in protocols.items %}
-                    <span class="badge badge-info mr-1">{{ protocol }}: {{ count }}</span>
-                    {% endfor %}
+            <div class="row">
+                <!-- Network Stats Column -->
+                <div class="col-md-6">
+                    <div class="stat-group">
+                        <h4 class="stat-header"><i class="fas fa-chart-line mr-2"></i>Network Statistics</h4>
+                        <div class="stat-item" id="volume-display">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Volume: 
+                            <span id="volume-value" class="stat-value">{{ volume|default:'--' }}</span> bps
+                        </div>
+                        <div class="stat-item" id="speed-display">
+                            <i class="fas fa-bolt mr-2"></i>Speed: 
+                            <span id="speed-value" class="stat-value">{{ speed|default:'--' }}</span> pps
+                        </div>
+                        <div class="stat-item" id="users-display">
+                            <i class="fas fa-users mr-2"></i>Users: 
+                            <span id="users-value" class="stat-value">{{ number_of_users }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Training Status Column -->
+                <div class="col-md-6">
+                    <div class="stat-group">
+                        <h4 class="stat-header"><i class="fas fa-graduation-cap mr-2"></i>Training Status</h4>
+                        <div class="stat-item">
+                            <i class="fas fa-clock mr-2"></i>Training Progress: 
+                            <span class="stat-value">{{ device.training_minutes }}/{{ training_minutes_required }} minutes</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-check-circle mr-2"></i>Status: 
+                            <span class="stat-value {% if device.training_minutes >= training_minutes_required %}text-success{% else %}text-warning{% endif %}">
+                                {% if device.training_minutes >= training_minutes_required %}
+                                    Trained
+                                {% else %}
+                                    Training in Progress
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="stat-item" id="connected-ips-display">
-                <div>Connected IPs:</div>
-                <div id="connected-ips-list" class="mt-2">
-                    {% for ip, count in connected_ips.items %}
-                    <span class="badge badge-warning mr-1">{{ ip }}: {{ count }}</span>
-                    {% endfor %}
+
+            <!-- Protocols and Connected IPs -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="stat-group">
+                        <h4 class="stat-header"><i class="fas fa-network-wired mr-2"></i>Protocols</h4>
+                        <div id="protocols-list" class="mt-2">
+                            {% for protocol, count in protocols.items %}
+                            <span class="badge badge-info mr-2 mb-2">{{ protocol }}: {{ count }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="stat-group">
+                        <h4 class="stat-header"><i class="fas fa-project-diagram mr-2"></i>Connected IPs</h4>
+                        <div id="connected-ips-list" class="mt-2">
+                            {% for ip, count in connected_ips.items %}
+                            <span class="badge badge-warning mr-2 mb-2">{{ ip }}: {{ count }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

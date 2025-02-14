@@ -8,7 +8,6 @@ from django.http import HttpRequest
 def dos_detection_training():
     try:
         request = HttpRequest()
-        scan_network_devices()
         check_dos_attack(request)
         store_captured_packets()
         calculate_parameters(request)

@@ -19,14 +19,17 @@ def packets_view(request, ip_address):
         global filter_ip_address
         filter_ip_address = ip_address    
         device = Device.objects.get(ip_address=ip_address, is_active=True)
+        training_minutes_required = Setting.objects.first().training_minutes
+        
         context = {
             'ip_address': ip_address,
-            'device': device,  # Make sure this is included
+            'device': device,
             'volume': device.volume,
             'speed': device.speed,
             'protocols': device.protocols,
             'connected_ips': device.connected_ips,
-            'number_of_users': device.number_of_users
+            'number_of_users': device.number_of_users,
+            'training_minutes_required': training_minutes_required
         }
         return render(request, 'packets.html', context)
     except Device.DoesNotExist:
