@@ -4,9 +4,14 @@
 <div class="container py-4">
     <header class="header d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3">Network Devices</h1>
-        <button id="scanDevices" class="btn btn-primary">
-            <i class="fas fa-sync-alt mr-2"></i>Scan Devices
-        </button>
+        <div class="btn-group">
+            <button id="scanDevices" class="btn btn-primary">
+                <i class="fas fa-sync-alt mr-2"></i>Scan Devices
+            </button>
+            <button id="addDeviceBtn" class="btn btn-success ml-2" data-toggle="modal" data-target="#addDeviceModal">
+                <i class="fas fa-plus mr-2"></i>Add Device
+            </button>
+        </div>
     </header>
 
     <main>
@@ -19,6 +24,34 @@
             </ul>
         </section>
     </main>
+</div>
+
+<!-- Add Device Modal -->
+<div class="modal fade" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDeviceModalLabel">Add Device Manually</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addDeviceForm">
+                    <div class="form-group">
+                        <label for="deviceIdentifier">MAC or IP Address:</label>
+                        <input type="text" class="form-control" id="deviceIdentifier" required 
+                               placeholder="Enter MAC (XX:XX:XX:XX:XX:XX) or IP (XXX.XXX.XXX.XXX)">
+                    </div>
+                </form>
+                <div id="addDeviceStatus" class="alert" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitAddDevice">Add Device</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Device Template -->
@@ -277,5 +310,63 @@
         }
         return cookieValue;
     }
+
+    // Add Device handler
+    $('#submitAddDevice').click(function() {
+        const identifier = $('#deviceIdentifier').val().trim();
+        const statusDiv = $('#addDeviceStatus');
+        
+        if (!identifier) {
+            showAddDeviceStatus('Please enter a MAC or IP address', 'danger');
+            return;
+        }
+
+        // Disable submit button and show loading state
+        $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Checking...');
+        
+        fetch('/api/devices/add/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ identifier: identifier })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showAddDeviceStatus('Device found and added successfully!', 'success');
+                setTimeout(() => {
+                    $('#addDeviceModal').modal('hide');
+                    loadActiveDevices();  // Refresh the device list
+                }, 1500);
+            } else {
+                showAddDeviceStatus(data.message || 'Failed to add device', 'danger');
+            }
+        })
+        .catch(error => {
+            showAddDeviceStatus('Error adding device', 'danger');
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            // Reset button state
+            $('#submitAddDevice').prop('disabled', false).html('Add Device');
+        });
+    });
+
+    function showAddDeviceStatus(message, type) {
+        const statusDiv = $('#addDeviceStatus');
+        statusDiv.removeClass('alert-success alert-danger')
+                .addClass(`alert-${type}`)
+                .html(message)
+                .show();
+    }
+
+    // Reset modal when closed
+    $('#addDeviceModal').on('hidden.bs.modal', function () {
+        $('#deviceIdentifier').val('');
+        $('#addDeviceStatus').hide();
+        $('#submitAddDevice').prop('disabled', false).html('Add Device');
+    });
 </script>
 {% endblock %}
