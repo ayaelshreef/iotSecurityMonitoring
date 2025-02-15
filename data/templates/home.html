@@ -152,49 +152,59 @@
 {% block extra_js %}
 <script>
     function loadActiveDevices() {
-        console.log('Loading devices...');
-        fetch("/", {
-            method: 'GET',
+        fetch('/', {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
-            },
+            }
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Received data:', data);
-            const deviceList = document.getElementById('devices-container');
-            deviceList.innerHTML = '';
+            const container = $('#devices-container');
+            container.empty();
 
-            if (data.devices && data.devices.length > 0) {
-                console.log(`Found ${data.devices.length} devices`);
-                data.devices.forEach(function(device) {
-                    console.log('Processing device:', device);
-                    const template = document.getElementById('device-template');
-                    if (!template) {
-                        console.error('Template not found!');
-                        return;
-                    }
-                    const clone = template.content.cloneNode(true);
-                    
-                    // Set device information
-                    const link = clone.querySelector('.device-link');
-                    link.href = `/packets/${device.ip}/`;
-                    link.textContent = device.name || device.ip;
+            data.devices.forEach(device => {
+                const deviceHtml = `
+                    <li class="list-group-item hover-shadow">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="device-info">
+                                <a href="/packets/${device.ip}/" class="device-link h6 mb-1 d-block text-primary">
+                                    ${device.name}
+                                </a>
+                                <small class="text-muted d-block">
+                                    <span class="mr-3">IP: ${device.ip}</span>
+                                    <span class="mr-3">MAC: ${device.mac}</span>
+                                    <i class="fas fa-users mr-1"></i>
+                                    <span class="users-display">${device.number_of_users}</span>
+                                </small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="device-status mr-3">
+                                    <span class="badge ${device.is_active ? 'badge-success' : 'badge-secondary'} mr-2">
+                                        ${device.is_active ? 'Active' : 'Inactive'}
+                                    </span>
+                                    <span class="badge ${device.is_trained ? 'badge-info' : 'badge-warning'}">
+                                        ${device.is_trained ? 'Trained' : 'Training'}
+                                    </span>
+                                </div>
+                                <div class="device-actions">
+                                    <button class="btn btn-outline-warning btn-sm edit-device" data-id="${device.id}">
+                                        <i class="fas fa-edit mr-1"></i>Edit
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm delete-device ml-2" data-id="${device.id}">
+                                        <i class="fas fa-trash-alt mr-1"></i>Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                `;
+                container.append(deviceHtml);
+            });
 
-                    // Set number of users
-                    clone.querySelector('.users-display').textContent = `Users: ${device.number_of_users}`;
-
-                    // Set button data
-                    clone.querySelector('.edit-device').dataset.id = device.id;
-                    clone.querySelector('.delete-device').dataset.id = device.id;
-
-                    deviceList.appendChild(clone);
-                });
-            } else {
-                console.log('No devices found');
-                const template = document.getElementById('no-devices-template');
-                const clone = template.content.cloneNode(true);
-                deviceList.appendChild(clone);
+            if (data.devices.length === 0) {
+                const noDevicesTemplate = document.getElementById('no-devices-template');
+                const clone = noDevicesTemplate.content.cloneNode(true);
+                container.append(clone);
             }
         })
         .catch(error => {
@@ -202,84 +212,20 @@
         });
     }
 
-    // Initial load
+    // Load devices when page loads
     $(document).ready(function() {
         loadActiveDevices();
-    });
-
-    // Scan button handler
-    $('#scanDevices').click(function() {
-        $(this).prop('disabled', true).html('<i class="fas fa-sync-alt mr-2"></i>Scanning...');
-        loadActiveDevices();
-        setTimeout(() => {
-            $(this).prop('disabled', false).html('<i class="fas fa-sync-alt mr-2"></i>Scan Devices');
-        }, 2000);
-    });
-
-    // Edit device handler
-    $(document).on('click', '.edit-device', function() {
-        const deviceId = $(this).data('id');
-        const listItem = $(this).closest('li');
-        const name = listItem.find('.device-name').text() || listItem.find('.device-link').text();
-        const users = parseInt(listItem.find('.users-display').text().match(/\d+/)[0]);
-
-        const template = document.getElementById('edit-form-template');
-        const clone = document.importNode(template.content, true);
-
-        // Set form values
-        clone.querySelector('#edit-name').value = name;
-        clone.querySelector('#edit-users').value = users;
-        clone.querySelector('.save-edit').dataset.id = deviceId;
-
-        listItem.html(clone);
-    });
-
-    // Save edit handler
-    $(document).on('click', '.save-edit', function() {
-        const deviceId = $(this).data('id');
-        const newData = {
-            name: $('#edit-name').val().trim(),
-            number_of_users: parseInt($('#edit-users').val())
-        };
         
-        fetch(`/api/devices/${deviceId}/update/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify(newData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                loadActiveDevices();  // Refresh the list
-            } else {
-                alert(data.message || 'Error updating device');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error updating device');
-        });
-    });
-
-    // Cancel edit handler
-    $(document).on('click', '.cancel-edit', function() {
-        loadActiveDevices();  // Refresh the list to cancel edit
-    });
-
-    // Delete device handler
-    $(document).on('click', '.delete-device', function() {
-        const deviceId = $(this).data('id');
-        if (confirm('Are you sure you want to delete this device?')) {
-            fetch(`/api/devices/${deviceId}/delete/`, {
-                method: 'DELETE',
+        // Refresh device list every 30 seconds
+        setInterval(loadActiveDevices, 30000);
+        
+        // Scan button handler
+        $('#scanDevices').click(function() {
+            $(this).prop('disabled', true)
+                   .html('<i class="fas fa-spinner fa-spin mr-2"></i>Scanning...');
+            
+            fetch('/scan/', {
+                method: 'GET',
                 headers: {
                     'X-CSRFToken': getCookie('csrftoken')
                 }
@@ -287,86 +233,179 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
+                    // Show feedback about new devices
+                    if (data.new_devices && data.new_devices.length > 0) {
+                        const deviceList = data.new_devices.map(device => 
+                            `${device.name} (${device.ip})`).join(', ');
+                        alert(`Found ${data.new_devices.length} new devices:\n${deviceList}`);
+                    } else {
+                        alert('No new devices found in the network.');
+                    }
+                    loadActiveDevices();  // Refresh the device list
+                }
+            })
+            .catch(error => {
+                console.error('Error scanning devices:', error);
+                alert('Error while scanning for devices');
+            })
+            .finally(() => {
+                $('#scanDevices').prop('disabled', false)
+                                .html('<i class="fas fa-sync-alt mr-2"></i>Scan Devices');
+            });
+        });
+
+        // Edit device handler
+        $(document).on('click', '.edit-device', function() {
+            const deviceId = $(this).data('id');
+            const listItem = $(this).closest('li');
+            const name = listItem.find('.device-name').text() || listItem.find('.device-link').text();
+            const users = parseInt(listItem.find('.users-display').text().match(/\d+/)[0]);
+
+            const template = document.getElementById('edit-form-template');
+            const clone = document.importNode(template.content, true);
+
+            // Set form values
+            clone.querySelector('#edit-name').value = name;
+            clone.querySelector('#edit-users').value = users;
+            clone.querySelector('.save-edit').dataset.id = deviceId;
+
+            listItem.html(clone);
+        });
+
+        // Save edit handler
+        $(document).on('click', '.save-edit', function() {
+            const deviceId = $(this).data('id');
+            const newData = {
+                name: $('#edit-name').val().trim(),
+                number_of_users: parseInt($('#edit-users').val())
+            };
+            
+            fetch(`/api/devices/${deviceId}/update/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(newData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
                     loadActiveDevices();  // Refresh the list
                 } else {
-                    alert('Error deleting device');
+                    alert(data.message || 'Error updating device');
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating device');
             });
-        }
-    });
+        });
 
-    // Helper function to get CSRF token
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
+        // Cancel edit handler
+        $(document).on('click', '.cancel-edit', function() {
+            loadActiveDevices();  // Refresh the list to cancel edit
+        });
+
+        // Delete device handler
+        $(document).on('click', '.delete-device', function() {
+            const deviceId = $(this).data('id');
+            if (confirm('Are you sure you want to delete this device?')) {
+                fetch(`/api/devices/${deviceId}/delete/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        loadActiveDevices();  // Refresh the list
+                    } else {
+                        alert('Error deleting device');
+                    }
+                });
+            }
+        });
+
+        // Helper function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
             }
-        }
-        return cookieValue;
-    }
-
-    // Add Device handler
-    $('#submitAddDevice').click(function() {
-        const identifier = $('#deviceIdentifier').val().trim();
-        const statusDiv = $('#addDeviceStatus');
-        
-        if (!identifier) {
-            showAddDeviceStatus('Please enter a MAC or IP address', 'danger');
-            return;
+            return cookieValue;
         }
 
-        // Disable submit button and show loading state
-        $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Checking...');
-        
-        fetch('/api/devices/add/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({ identifier: identifier })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                showAddDeviceStatus('Device found and added successfully!', 'success');
-                setTimeout(() => {
-                    $('#addDeviceModal').modal('hide');
-                    loadActiveDevices();  // Refresh the device list
-                }, 1500);
-            } else {
-                showAddDeviceStatus(data.message || 'Failed to add device', 'danger');
+        // Add Device handler
+        $('#submitAddDevice').click(function() {
+            const identifier = $('#deviceIdentifier').val().trim();
+            const statusDiv = $('#addDeviceStatus');
+            
+            if (!identifier) {
+                showAddDeviceStatus('Please enter a MAC or IP address', 'danger');
+                return;
             }
-        })
-        .catch(error => {
-            showAddDeviceStatus('Error adding device', 'danger');
-            console.error('Error:', error);
-        })
-        .finally(() => {
-            // Reset button state
+
+            // Disable submit button and show loading state
+            $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Checking...');
+            
+            fetch('/api/devices/add/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ identifier: identifier })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showAddDeviceStatus('Device found and added successfully!', 'success');
+                    setTimeout(() => {
+                        $('#addDeviceModal').modal('hide');
+                        loadActiveDevices();  // Refresh the device list
+                    }, 1500);
+                } else {
+                    showAddDeviceStatus(data.message || 'Failed to add device', 'danger');
+                }
+            })
+            .catch(error => {
+                showAddDeviceStatus('Error adding device', 'danger');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                // Reset button state
+                $('#submitAddDevice').prop('disabled', false).html('Add Device');
+            });
+        });
+
+        function showAddDeviceStatus(message, type) {
+            const statusDiv = $('#addDeviceStatus');
+            statusDiv.removeClass('alert-success alert-danger')
+                    .addClass(`alert-${type}`)
+                    .html(message)
+                    .show();
+        }
+
+        // Reset modal when closed
+        $('#addDeviceModal').on('hidden.bs.modal', function () {
+            $('#deviceIdentifier').val('');
+            $('#addDeviceStatus').hide();
             $('#submitAddDevice').prop('disabled', false).html('Add Device');
         });
-    });
-
-    function showAddDeviceStatus(message, type) {
-        const statusDiv = $('#addDeviceStatus');
-        statusDiv.removeClass('alert-success alert-danger')
-                .addClass(`alert-${type}`)
-                .html(message)
-                .show();
-    }
-
-    // Reset modal when closed
-    $('#addDeviceModal').on('hidden.bs.modal', function () {
-        $('#deviceIdentifier').val('');
-        $('#addDeviceStatus').hide();
-        $('#submitAddDevice').prop('disabled', false).html('Add Device');
     });
 </script>
 {% endblock %}

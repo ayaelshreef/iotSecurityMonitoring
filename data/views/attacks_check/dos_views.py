@@ -87,17 +87,28 @@ def check_dos_attack(request):
     })
 
 def calculate_parameters(request):
+    # Get only devices that need more training
+    setting_minutes = Setting.objects.first().training_minutes
     devices = Device.objects.filter(
         is_active=True,
-        training_minutes__lt=Setting.objects.first().training_minutes      
+        training_minutes__lt=setting_minutes  # Only get devices that haven't completed training
     )
     
     if not devices.exists():
-        return JsonResponse({'message': "There are no active devices in the network"}, status=404)
+        return JsonResponse({
+            'status': 'success',
+            'message': "No devices require training at this time",
+            'processed_devices': 0
+        })
+    
+    all_protocols = set()  # Track all protocols across all devices
         
     for device in devices:
         # Get all packets for this device
         packets = device.packet_set.all()
+        
+        if not packets.exists():
+            continue
         
         # Calculate basic metrics
         total_bits = sum(packet.bytes_transferred * 8 for packet in packets)
@@ -113,6 +124,7 @@ def calculate_parameters(request):
                 # Track protocols
                 protocol = str(packet.protocol)
                 protocol_counts[protocol] += 1
+                all_protocols.add(protocol)  # Add to overall protocols set
                 
                 # Track connected IPs
                 if packet.src_ip != device.ip_address:
@@ -128,28 +140,45 @@ def calculate_parameters(request):
         bps = total_bits / 60
         pps = num_packets / 60
         
-        device.volume = max(bps, device.volume)
-        device.speed = max(pps, device.speed)
+        device.volume = max(float(bps), float(device.volume))
+        device.speed = max(float(pps), float(device.speed))
         device.training_minutes += 1
         
         # Update protocols and connected IPs
         device.update_protocols(dict(protocol_counts))
         device.update_connected_ips(list(connected_ips))
         
-        if device.training_minutes >= Setting.objects.first().training_minutes:
+        # Check if training is complete
+        if device.training_minutes >= setting_minutes:
             device.is_trained = True
-        else:
-            device.is_trained = False
-    
+            # Create notification for training completion
+            Notification.objects.create(
+                type='training',
+                message=f"Training completed for device {device.name} ({device.ip_address})",
+                details=json.dumps({
+                    'device_id': device.id,
+                    'training_minutes': device.training_minutes,
+                    'volume': float(device.volume),
+                    'speed': float(device.speed),
+                    'number_of_users': device.number_of_users,
+                    'protocols': device.protocols
+                })
+            )
+        
         device.save()
         
         # Delete processed packets
         device.packet_set.all().delete()
-        
+    
+    trained_devices = devices.filter(is_trained=True).count()
+    in_training = devices.filter(is_trained=False).count()
+    
     return JsonResponse({
         "status": "success",
         "processed_devices": len(devices),
-        "protocols_detected": list(protocol_counts.keys())
+        "newly_trained_devices": trained_devices,
+        "devices_in_training": in_training,
+        "protocols_detected": list(all_protocols)  # Use the collected protocols
     })
 
 def store_captured_packets():
@@ -228,11 +257,11 @@ def check_volume_anomaly(device, time_window=60):
     packets = device.packet_set.filter(timestamp__range=(start_time, end_time))
     current_volume = sum(p.bytes_transferred for p in packets)
     
-    # Compare with trained volume
-    if device.is_trained and current_volume > device.volume * 1.5:  # 50% threshold
-        create_alert(device, 'Volume', current_volume, device.volume)
-        return True, current_volume, device.volume
-    return False, current_volume, device.volume
+    # Compare with trained volume - convert Decimal to float for comparison
+    if device.is_trained and float(current_volume) > float(device.volume) * 1.5:  # 50% threshold
+        create_alert(device, 'Volume', float(current_volume), float(device.volume))
+        return True, float(current_volume), float(device.volume)
+    return False, float(current_volume), float(device.volume)
 
 def check_speed_anomaly(device, time_window=60):
     """Check for speed anomalies in the last time_window seconds."""
@@ -244,26 +273,11 @@ def check_speed_anomaly(device, time_window=60):
     total_bytes = sum(p.bytes_transferred for p in packets)
     current_speed = total_bytes / time_window if packets.exists() else 0
     
-    # Compare with trained speed
-    if device.is_trained and current_speed > device.speed * 1.5:  # 50% threshold
-        create_alert(device, 'Speed', current_speed, device.speed)
-        return True, current_speed, device.speed
-    return False, current_speed, device.speed
-
-def check_users_anomaly(device, time_window=60):
-    """Check for number of users anomalies in the last time_window seconds."""
-    end_time = timezone.now()
-    start_time = end_time - timedelta(seconds=time_window)
-    
-    # Count unique IPs communicating with the device
-    packets = device.packet_set.filter(timestamp__range=(start_time, end_time))
-    current_users = len(set(p.src_ip for p in packets if p.src_ip != device.ip_address))
-    
-    # Compare with trained number of users
-    if device.is_trained and current_users > device.number_of_users * 1.5:  # 50% threshold
-        create_alert(device, 'Number of Users', current_users, device.number_of_users)
-        return True, current_users, device.number_of_users
-    return False, current_users, device.number_of_users
+    # Compare with trained speed - convert Decimal to float for comparison
+    if device.is_trained and float(current_speed) > float(device.speed) * 1.5:  # 50% threshold
+        create_alert(device, 'Speed', float(current_speed), float(device.speed))
+        return True, float(current_speed), float(device.speed)
+    return False, float(current_speed), float(device.speed)
 
 def check_protocols_anomaly(device, time_window=60):
     """Check for protocol usage anomalies in the last time_window seconds."""
@@ -303,7 +317,6 @@ def check_parameters(request, device_id=None):
         for device in devices:
             volume_result = check_volume_anomaly(device)
             speed_result = check_speed_anomaly(device)
-            users_result = check_users_anomaly(device)
             protocols_result = check_protocols_anomaly(device)
 
             device_result = {
@@ -379,18 +392,6 @@ def check_device_parameters_all():
                     'device_name': device.name,
                     'current_speed': current_speed,
                     'threshold_speed': threshold_speed
-                })
-            )
-
-        users_anomaly, current_users, threshold_users = check_users_anomaly(device)
-        if users_anomaly:
-            Notification.objects.create(
-                type='alert',
-                message=f"Unusual number of users detected for device {device.name}",
-                details=json.dumps({
-                    'device_name': device.name,
-                    'current_users': current_users,
-                    'threshold_users': threshold_users
                 })
             )
 

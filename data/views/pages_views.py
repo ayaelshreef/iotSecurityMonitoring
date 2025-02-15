@@ -32,15 +32,17 @@ def check_network_for_device(identifier):
 
 def home(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        # Filter only active devices
-        devices = Device.objects.filter(is_active=True)
+        # Get all devices (not just active ones)
+        devices = Device.objects.all()
         devices_data = [
             {
                 'id': device.id,
                 'ip': device.ip_address,
+                'mac': device.mac_address,
                 'name': device.name,
                 'is_active': device.is_active,
                 'number_of_users': device.number_of_users,
+                'is_trained': device.is_trained
             } for device in devices
         ]
         return JsonResponse({'devices': devices_data})

@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from scapy.all import ARP, Ether, srp
 from data.models import Device
 from data.utils import firebase
+from django.views.decorators.http import require_http_methods
 
 def convert_to_cidr(ip, netmask):
     # Create an IPv4 network object
@@ -58,9 +59,13 @@ def identify_iot_devices(devices):
             iot_devices.append(device)
     return iot_devices
 
-def scan_network_devices(request):
+def scan_network_devices(request, update_only):
+    """
+    Scan network for devices.
+    If update_only is True, only update existing devices' statuses.
+    If update_only is False, discover new devices and update existing ones' status.
+    """
     try:
-        # Identify the command for fetching network configurations
         command = 'ipconfig' if os.name == 'nt' else 'ifconfig'
         output = subprocess.run(command, capture_output=True, text=True, shell=True).stdout
         
@@ -74,51 +79,138 @@ def scan_network_devices(request):
         # Look for the IPv4 address 
         ip_address = re.search(r"(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)", wifi_section).group()
         netmask = re.search(r"255(?:\.\d+){3}", wifi_section).group()
-        #if not found ip4_address
         target_ip = convert_to_cidr(ip_address, netmask)
-
-        # ARP request to scan devices on the network
-        arp_request = ARP(pdst=target_ip)
+        arp = ARP(pdst=target_ip)
         broadcast = Ether(dst="ff:ff:ff:ff:ff:ff")
-        packet = broadcast / arp_request
-
-        # Send ARP packet and capture responses
-        answered = srp(packet, timeout=2, verbose=False)[0]
-
-        devices = []
-        processed_mac_addresses = []
-
-        for sent, received in answered:
-            device_info = {
-                'ip': received.psrc,
-                'mac': received.hwsrc,
-                'os': 'Unknown',  # Optional: Integrate OS detection below if needed
-                # 'services': []    # Optional: Add service scanning with PortScanner if needed
+        result = srp(broadcast/arp, timeout=3, verbose=False)[0]
+        
+        # Get all MAC addresses found in the scan
+        active_macs = {received.hwsrc.lower(): received.psrc for _, received in result}
+        
+        if update_only:
+            # Update status of all existing devices
+            devices = Device.objects.all()
+            for device in devices:
+                device.is_active = device.mac_address.lower() in active_macs
+                device.save()
+            return {
+                'status': 'success',
+                'message': 'Device statuses updated'
             }
-
-            Device.objects.update_or_create(
-            mac_address=device_info['mac'],
-            defaults={
-                "ip_address" : device_info['ip'],
-                "is_active" : True
-                }
-            )
+        else:
+            # Get existing MAC addresses from database
+            existing_devices = {device.mac_address.lower(): device 
+                              for device in Device.objects.all()}
             
-            processed_mac_addresses.append(device_info['mac'])
+            # Add new devices and update existing ones
+            new_devices = []
+            for mac, ip in active_macs.items():
+                if mac in existing_devices:
+                    # Update existing device
+                    device = existing_devices[mac]
+                    device.is_active = True
+                    device.ip_address = ip
+                    device.save()
+                else:
+                    # Create new device
+                    device = Device.objects.create(
+                        mac_address=mac,
+                        ip_address=ip,
+                        is_active=True,
+                        name=f"Device_{mac[-6:]}"
+                    )
+                    new_devices.append({
+                        'mac': mac,
+                        'ip': ip,
+                        'name': device.name
+                    })
             
-            defaults={
-                "ip_address" : device_info['ip'],
-                "is_active" : True
-                }
+            # Set devices not found in scan as inactive
+            for mac, device in existing_devices.items():
+                if mac not in active_macs:
+                    device.is_active = False
+                    device.save()
             
-            firebase.update_or_create_device(device_info['mac'], defaults)
-            devices.append(device_info)
-            
-        Device.objects.exclude(mac_address__in=processed_mac_addresses).update(is_active=False)
-
-        firebase.update_devices_activity(processed_mac_addresses)
-
-        return JsonResponse({"devices": devices})
-
+            return {
+                'status': 'success',
+                'message': f'Found {len(new_devices)} new devices' if new_devices else 'No new devices found',
+                'new_devices': new_devices
+            }
+        
     except Exception as e:
-        return JsonResponse({"error": f"An error occurred: {str(e)}"})
+        return {
+            'status': 'error',
+            'message': str(e)
+        }
+
+@require_http_methods(["GET"])
+def scan_network_devices_view(request):
+    """View function to handle scan request from web interface."""
+    result = scan_network_devices(request,update_only=False)
+    return JsonResponse(result)
+
+
+# def scan_network_devices(request):
+#     try:
+#         # Identify the command for fetching network configurations
+#         command = 'ipconfig' if os.name == 'nt' else 'ifconfig'
+#         output = subprocess.run(command, capture_output=True, text=True, shell=True).stdout
+        
+#         wifi_section_start = output.find("Wi-Fi")
+#         if wifi_section_start == -1:
+#             return "Wi-Fi section not found"
+
+#         # Extract the section after "Wi-Fi"
+#         wifi_section = output[wifi_section_start:]
+        
+#         # Look for the IPv4 address 
+#         ip_address = re.search(r"(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)", wifi_section).group()
+#         netmask = re.search(r"255(?:\.\d+){3}", wifi_section).group()
+#         #if not found ip4_address
+#         target_ip = convert_to_cidr(ip_address, netmask)
+
+#         # ARP request to scan devices on the network
+#         arp_request = ARP(pdst=target_ip)
+#         broadcast = Ether(dst="ff:ff:ff:ff:ff:ff")
+#         packet = broadcast / arp_request
+
+#         # Send ARP packet and capture responses
+#         answered = srp(packet, timeout=2, verbose=False)[0]
+
+#         devices = []
+#         processed_mac_addresses = []
+
+#         for sent, received in answered:
+#             device_info = {
+#                 'ip': received.psrc,
+#                 'mac': received.hwsrc,
+#                 'os': 'Unknown',  # Optional: Integrate OS detection below if needed
+#                 # 'services': []    # Optional: Add service scanning with PortScanner if needed
+#             }
+
+#             Device.objects.update_or_create(
+#             mac_address=device_info['mac'],
+#             defaults={
+#                 "ip_address" : device_info['ip'],
+#                 "is_active" : True
+#                 }
+#             )
+            
+#             processed_mac_addresses.append(device_info['mac'])
+            
+#             defaults={
+#                 "ip_address" : device_info['ip'],
+#                 "is_active" : True
+#                 }
+            
+#             firebase.update_or_create_device(device_info['mac'], defaults)
+#             devices.append(device_info)
+            
+#         Device.objects.exclude(mac_address__in=processed_mac_addresses).update(is_active=False)
+
+#         firebase.update_devices_activity(processed_mac_addresses)
+
+#         return JsonResponse({"devices": devices})
+
+#     except Exception as e:
+#         return JsonResponse({"error": f"An error occurred: {str(e)}"})
