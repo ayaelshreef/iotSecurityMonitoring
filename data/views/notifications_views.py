@@ -32,23 +32,14 @@ def mark_all_read(request):
     Notification.objects.filter(is_read=False).update(is_read=True)
     return JsonResponse({'status': 'success'})
 
-# def create_notification(message, severity='medium'):
-#     """
-#     Utility function to create a new notification and broadcast it via WebSocket
-#     """
-#     notification = Notification.objects.create(
-#         message=message,
-#         severity=severity
-#     )
-    
-#     # Import here to avoid circular imports
-#     from ..consumers import NotificationConsumer
-    
-#     # Broadcast the notification to all connected clients
-#     NotificationConsumer.broadcast_notification({
-#         'id': notification.id,
-#         'message': notification.message,
-#         'timestamp': notification.timestamp.isoformat(),
-#         'is_read': notification.is_read,
-#         'severity': notification.severity
-#     }) 
+@csrf_exempt
+@require_http_methods(["POST"])
+def mark_alerts_read(request):
+    """Mark all unread notifications as read when accessing alerts."""
+    try:
+        # Mark all unread notifications as read without filtering by type
+        Notification.objects.filter(is_read=False).update(is_read=True)
+        return JsonResponse({'status': 'success'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+

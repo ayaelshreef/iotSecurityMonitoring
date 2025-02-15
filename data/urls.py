@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/notifications/', notifications_views.get_notifications),
     path('api/notifications/<int:notification_id>/mark-read/', notifications_views.mark_notification_read),
     path('api/notifications/mark-all-read/', notifications_views.mark_all_read),
+    path('api/notifications/mark-alerts-read/', notifications_views.mark_alerts_read, name='mark_alerts_read'),
     
     # Settings
     path('settings/', pages_views.settings_view, name='settings'),

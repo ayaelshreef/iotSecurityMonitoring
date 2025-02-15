@@ -126,17 +126,6 @@
             align-items: center;
         }
 
-        .mark-all-read {
-            font-size: 0.8rem;
-            color: #507687;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .mark-all-read:hover {
-            text-decoration: underline;
-        }
-
         .no-notifications {
             padding: 1rem;
             text-align: center;
@@ -164,7 +153,7 @@
                         <a class="nav-link {% if '/packets' in request.path %}active{% endif %}" href="/packets">Packets</a>
                     </li> -->
                     <li class="nav-item position-relative">
-                        <a class="nav-link {% if '/attacks' in request.path %}active{% endif %}" href="/attacks"
+                        <a class="nav-link {% if '/attacks' in request.path %}active{% endif %}" href="#" 
                             id="notificationsDropdown">
                             Security Alerts
                             <span class="notification-badge">0</span>
@@ -172,7 +161,6 @@
                         <div class="notifications-dropdown">
                             <div class="notifications-header">
                                 <span>Notifications</span>
-                                <a href="#" class="mark-all-read">Mark all as read</a>
                             </div>
                             <div class="notifications-list">
                                 <div class="no-notifications">No new notifications</div>
@@ -206,6 +194,21 @@
             $('#notificationsDropdown').click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();
+                
+                // Only make the API call if there are unread notifications
+                const unreadCount = $('.notification-item.unread').length;
+                if (unreadCount > 0) {
+                    $.ajax({
+                        url: '/api/notifications/mark-alerts-read/',
+                        type: 'POST',
+                        success: function() {
+                            // Update UI to reflect read status
+                            $('.notification-badge').hide();
+                            $('.notification-item').removeClass('unread');
+                        }
+                    });
+                }
+                
                 $('.notifications-dropdown').toggle();
                 notificationsVisible = !notificationsVisible;
             });
@@ -221,19 +224,6 @@
             // Prevent dropdown from closing when clicking inside it
             $('.notifications-dropdown').click(function (e) {
                 e.stopPropagation();
-            });
-
-            // Mark all notifications as read
-            $('.mark-all-read').click(function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: '/api/notifications/mark-all-read/',
-                    type: 'POST',
-                    success: function () {
-                        $('.notification-item').removeClass('unread');
-                        updateNotificationBadge(0);
-                    }
-                });
             });
 
             // Function to update notification badge
