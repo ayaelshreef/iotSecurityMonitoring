@@ -1,17 +1,12 @@
 from celery import shared_task
-from data.views.scan_network_views import scan_network_devices
-from data.views.attacks_check.dos_views import calculate_parameters, store_captured_packets, check_dos_attack
-import requests
-from django.http import HttpRequest
+from data.views.attacks_check.dos_views import check_device_parameters_all, dos_detection_training
 
 @shared_task
-def dos_detection_training():
-    try:
-        request = HttpRequest()
-        check_dos_attack(request)
-        store_captured_packets()
-        calculate_parameters(request)
-        return "Successfully trained devices to detect DoS attacks, and checked for potential DoS attacks"
-    except requests.exceptions.RequestException as e:
-        return f"Error: {str(e)}"
-    
+def check_device_parameters():
+    """Task to check all parameters for all active devices."""
+    return check_device_parameters_all()
+
+@shared_task
+def train_dos_detection():
+    """Task to train devices for DoS detection."""
+    return dos_detection_training()
