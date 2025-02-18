@@ -360,7 +360,7 @@
             return cookieValue;
         }
 
-        // Add Device handler
+        // Handle add device form submission
         $('#submitAddDevice').click(function() {
             const identifier = $('#deviceIdentifier').val().trim();
             const statusDiv = $('#addDeviceStatus');
@@ -370,8 +370,17 @@
                 return;
             }
 
+            // Validate format
+            const isValidMAC = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/i.test(identifier);
+            const isValidIP = /^(\d{1,3}\.){3}\d{1,3}$/.test(identifier);
+
+            if (!isValidMAC && !isValidIP) {
+                showAddDeviceStatus('Invalid format. Please enter a valid MAC (XX:XX:XX:XX:XX:XX) or IP (XXX.XXX.XXX.XXX) address', 'danger');
+                return;
+            }
+
             // Disable submit button and show loading state
-            $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Checking...');
+            $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Checking Network...');
             
             fetch('/api/devices/add/', {
                 method: 'POST',

@@ -1,398 +1,237 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Captured Packets for {{ ip_address }}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .header {
-            background-color: #f8f9fa;
-            color: #333;
-            padding: 20px 0;
-            text-align: left;
-            border-radius: 0.5rem 0.5rem 0 0;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .statistics-box {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .stat-group {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            height: 100%;
-        }
-
-        .stat-header {
-            color: #2c3e50;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e9ecef;
-        }
-
-        .stat-item {
-            margin-bottom: 12px;
-            color: #495057;
-            font-size: 0.95rem;
-        }
-
-        .stat-value {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .badge {
-            padding: 8px 12px;
-            font-size: 0.85rem;
-        }
-
-        .badge-info {
-            background-color: #3498db;
-        }
-
-        .badge-warning {
-            background-color: #f1c40f;
-            color: #2c3e50;
-        }
-
-        .packet-list {
-            margin-top: 20px;
-            background-color: white;
-            border-radius: 0.5rem;
-            padding: 15px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .button-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        button {
-            padding: 10px 20px;
-            text-decoration: none;
-            color: white;
-            background-color: #507687;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #456a77;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-
-        <header class="header d-flex justify-content-between align-items-center">
-            <div>
-                <h1 class="h3">Device: {{ device.name }}</h1>
-                <small class="text-muted">IP: {{ ip_address }}</small>
-                <small class="text-muted">MAC: {{ device.mac_address }}</small>
-            </div>
-            <div>
-                <button class="btn btn-warning" id="editDevice">Edit Device</button>
-                <button class="btn btn-danger" id="deleteDevice" data-id="{{ device.id }}">Delete Device</button>
-            </div>
-        </header>
-
-        {% if error_message %}
-        <div class="alert alert-warning text-center">
+<div class="container py-4">
+    {% if error_message %}
+        <div class="alert alert-danger" role="alert">
             {{ error_message }}
         </div>
-        {% else %}
-        <!-- Add edit form (initially hidden) -->
-        <div id="editForm" class="statistics-box" style="display: none;">
-            <h3 class="h5">Edit Device</h3>
-            <div class="form-group">
-                <label>Name:</label>
-                <input type="text" class="form-control" id="edit-name" value="{{ device.name }}">
+    {% else %}
+        <div class="card shadow-sm">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h2 class="h5 mb-0">Device Details</h2>
+                <div class="device-status">
+                    <span class="badge {% if device.is_active %}badge-success{% else %}badge-secondary{% endif %}">
+                        {{ device.is_active|yesno:"Active,Inactive" }}
+                    </span>
+                    <span class="badge {% if device.is_trained %}badge-info{% else %}badge-warning{% endif %}">
+                        {{ device.is_trained|yesno:"Trained,Training" }}
+                    </span>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Number of Users:</label>
-                <input type="number" class="form-control" id="edit-users" value="{{ device.number_of_users }}" min="1">
-            </div>
-            <button class="btn btn-primary" id="saveEdit">Save</button>
-            <button class="btn btn-secondary" id="cancelEdit">Cancel</button>
-        </div>
-        <div class="statistics-box" id="statistics-box">
-            <div class="row">
-                <!-- Network Stats Column -->
-                <div class="col-md-6">
-                    <div class="stat-group">
-                        <h4 class="stat-header"><i class="fas fa-chart-line mr-2"></i>Network Statistics</h4>
-                        <div class="stat-item" id="volume-display">
-                            <i class="fas fa-tachometer-alt mr-2"></i>Volume: 
-                            <span id="volume-value" class="stat-value">{{ volume|default:'--' }}</span> bps
-                        </div>
-                        <div class="stat-item" id="speed-display">
-                            <i class="fas fa-bolt mr-2"></i>Speed: 
-                            <span id="speed-value" class="stat-value">{{ speed|default:'--' }}</span> pps
-                        </div>
-                        <div class="stat-item" id="users-display">
-                            <i class="fas fa-users mr-2"></i>Users: 
-                            <span id="users-value" class="stat-value">{{ number_of_users }}</span>
-                        </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h3 class="h6 text-muted">Basic Information</h3>
+                        <dl class="row">
+                            <dt class="col-sm-4">Name</dt>
+                            <dd class="col-sm-8">{{ device.name }}</dd>
+                            
+                            <dt class="col-sm-4">IP Address</dt>
+                            <dd class="col-sm-8">{{ device.ip_address }}</dd>
+                            
+                            <dt class="col-sm-4">MAC Address</dt>
+                            <dd class="col-sm-8">{{ device.mac_address }}</dd>
+                            
+                            <dt class="col-sm-4">Users</dt>
+                            <dd class="col-sm-8">{{ device.number_of_users }}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="h6 text-muted">Performance Metrics</h3>
+                        <dl class="row">
+                            <dt class="col-sm-4">Volume</dt>
+                            <dd class="col-sm-8">{{ volume|floatformat:2 }} bits/sec</dd>
+                            
+                            <dt class="col-sm-4">Speed</dt>
+                            <dd class="col-sm-8">{{ speed|floatformat:2 }} packets/sec</dd>
+                            
+                            <dt class="col-sm-4">Training</dt>
+                            <dd class="col-sm-8">{{ device.training_minutes }}/{{ training_minutes_required }} minutes</dd>
+                        </dl>
                     </div>
                 </div>
-                
-                <!-- Training Status Column -->
-                <div class="col-md-6">
-                    <div class="stat-group">
-                        <h4 class="stat-header"><i class="fas fa-graduation-cap mr-2"></i>Training Status</h4>
-                        <div class="stat-item">
-                            <i class="fas fa-clock mr-2"></i>Training Progress: 
-                            <span class="stat-value">{{ device.training_minutes }}/{{ training_minutes_required }} minutes</span>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-check-circle mr-2"></i>Status: 
-                            <span class="stat-value {% if device.training_minutes >= training_minutes_required %}text-success{% else %}text-warning{% endif %}">
-                                {% if device.training_minutes >= training_minutes_required %}
-                                    Trained
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3 class="h6 mb-0">Allowed Protocols</h3>
+                            </div>
+                            <div class="card-body">
+                                {% if protocols %}
+                                    <ul class="list-unstyled mb-0">
+                                        {% for protocol in protocols %}
+                                            <li>{{ protocol }}</li>
+                                        {% endfor %}
+                                    </ul>
                                 {% else %}
-                                    Training in Progress
+                                    <p class="text-muted mb-0">No protocols recorded</p>
                                 {% endif %}
-                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3 class="h6 mb-0">Connected IPs</h3>
+                            </div>
+                            <div class="card-body">
+                                {% if connected_ips %}
+                                    <ul class="list-unstyled mb-0">
+                                        {% for ip in connected_ips %}
+                                            <li>{{ ip }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <p class="text-muted mb-0">No connected IPs recorded</p>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Protocols and Connected IPs -->
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="stat-group">
-                        <h4 class="stat-header"><i class="fas fa-network-wired mr-2"></i>Protocols</h4>
-                        <div id="protocols-list" class="mt-2">
-                            {% for protocol in protocols %}
-                            <span class="badge badge-info mr-2 mb-2">{{ protocol }}</span>
-                            {% endfor %}
+                {% if device.is_active %}
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">Packet Capture</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <button id="startSniffing" class="btn btn-primary">
+                                    <i class="fas fa-play mr-2"></i>Start Capture
+                                </button>
+                                <button id="stopSniffing" class="btn btn-danger ml-2" disabled>
+                                    <i class="fas fa-stop mr-2"></i>Stop Capture
+                                </button>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover" id="packetsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>Source IP</th>
+                                            <th>Destination IP</th>
+                                            <th>Protocol</th>
+                                            <th>Size (bytes)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Packets will be inserted here -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="stat-group">
-                        <h4 class="stat-header"><i class="fas fa-project-diagram mr-2"></i>Connected IPs</h4>
-                        <div id="connected-ips-list" class="mt-2">
-                            {% for ip in connected_ips %}
-                            <span class="badge badge-warning mr-2 mb-2">{{ ip }}</span>
-                            {% endfor %}
-                        </div>
+                {% else %}
+                    <div class="alert alert-info mt-4" role="alert">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        This device is currently inactive. Packet capture is only available for active devices.
                     </div>
-                </div>
+                {% endif %}
             </div>
         </div>
+    {% endif %}
+</div>
 
-        <div class="button-container">
-            <button id="start-sniffer">Start Sniffer</button>
-            <button id="stop-sniffer">Stop Sniffer</button>
-        </div>
+<style>
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+.badge {
+    font-size: 0.875em;
+    padding: 0.5em 0.75em;
+}
+.badge-success {
+    background-color: #28a745;
+}
+.badge-secondary {
+    background-color: #6c757d;
+}
+.badge-info {
+    background-color: #17a2b8;
+}
+.badge-warning {
+    background-color: #ffc107;
+    color: #000;
+}
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,.075);
+}
+.btn {
+    border-radius: 0.25rem;
+}
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+</style>
 
-        <main>
-            <section class="packet-list">
-                <h2 class="h5">Packets:</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>Source IP</th>
-                            <th>Destination IP</th>
-                            <th>Protocol</th>
-                            <th>Bytes Transferred</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody id="packets-table">
-                        <!-- Packets will be populated here -->
-                    </tbody>
-                </table>
-            </section>
-        </main>
-        {% endif %}
-    </div>
-    {% endblock %}
-    {% block extra_js %}
+{% endblock %}
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>
-        const ipAddress = "{{ ip_address }}"; // Ensure this is set correctly in your Django template
-
-        // Start Sniffer
-        document.getElementById('start-sniffer').addEventListener('click', function () {
-            fetch("/start-sniffer", {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.status);
-                })
-                .catch(error => {
-                    console.error('Error starting sniffer:', error);
-                });
-        });
-
-        // Stop Sniffer
-        document.getElementById('stop-sniffer').addEventListener('click', function () {
-            fetch("/stop-sniffer", {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.status);
-                })
-                .catch(error => {
-                    console.error('Error stopping sniffer:', error);
-                });
-        });
-
-        // Fetch Packets
-        function fetchPackets(ipAddress) {
-            fetch(`/fetch-packets/${ipAddress}/`, {  // Include the IP address in the URL
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.querySelector('#packets-table'); // Ensure this matches your HTML
-                    console.log(ipAddress);
-                    tableBody.innerHTML = ''; // Clear existing rows
-                    data.packets.forEach(packet => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                        <td>${packet.timestamp}</td>
-                        <td>${packet.src_ip}</td>
-                        <td>${packet.dst_ip}</td>
-                        <td>${packet.protocol}</td>
-                        <td>${packet.bytes_transferred}</td>
-                        <td>${packet.details}</td>
-                    `;
-                        tableBody.appendChild(row);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching packets:', error);
-                });
-        }
-
-        // Fetch packets right away
-        fetchPackets(ipAddress); // Call immediately after defining
-
-        // Fetch packets every 10 seconds
-        const fetchInterval = setInterval(() => fetchPackets(ipAddress), 2000);
-
-        // Edit Device
-        $('#editDevice').click(function() {
-            $('#editForm').show();
-            $('#statistics-box').hide();
-        });
-
-        $('#cancelEdit').click(function() {
-            $('#editForm').hide();
-            $('#statistics-box').show();
-        });
-
-        $('#saveEdit').click(function() {
-            const newData = {
-                name: $('#edit-name').val().trim(),
-                number_of_users: parseInt($('#edit-users').val())
-            };
-            
-            fetch(`/api/devices/{{ device.id }}/update/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify(newData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+{% block extra_js %}
+{% if device.is_active %}
+<script>
+    let isSniffing = false;
+    
+    function updatePacketsTable() {
+        if (!isSniffing) return;
+        
+        fetch('/fetch-packets/{{ ip_address }}/')
+            .then(response => response.json())
             .then(data => {
-                if (data.status === 'success') {
-                    window.location.reload();  // Refresh the page
-                } else {
-                    alert(data.message || 'Error updating device');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error updating device');
-            });
-        });
-
-        // Delete Device
-        document.getElementById('deleteDevice').addEventListener('click', function() {
-            const deviceId = this.getAttribute('data-id');
-            if (confirm('Are you sure you want to delete this device?')) {
-                fetch(`/api/devices/${deviceId}/delete/`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        window.location.href = '/';  // Redirect to home page
-                    } else {
-                        alert('Error deleting device');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error deleting device');
+                const tbody = $('#packetsTable tbody');
+                tbody.empty();
+                
+                data.packets.forEach(packet => {
+                    const row = `
+                        <tr>
+                            <td>${packet.timestamp}</td>
+                            <td>${packet.src_ip}</td>
+                            <td>${packet.dst_ip}</td>
+                            <td>${packet.protocol}</td>
+                            <td>${packet.bytes_transferred}</td>
+                        </tr>
+                    `;
+                    tbody.append(row);
                 });
-            }
-        });
-
-        // CSRF token helper function
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-    </script>
-    {% endblock %}
-</body>
-
-</html>
+            });
+    }
+    
+    $('#startSniffing').click(function() {
+        $(this).prop('disabled', true);
+        $('#stopSniffing').prop('disabled', false);
+        
+        fetch('/start-sniffer/')
+            .then(response => response.json())
+            .then(data => {
+                isSniffing = true;
+                updatePacketsTable();
+                // Update table every second
+                setInterval(updatePacketsTable, 1000);
+            });
+    });
+    
+    $('#stopSniffing').click(function() {
+        $(this).prop('disabled', true);
+        $('#startSniffing').prop('disabled', false);
+        
+        fetch('/stop-sniffer/')
+            .then(response => response.json())
+            .then(data => {
+                isSniffing = false;
+            });
+    });
+</script>
+{% endif %}
+{% endblock %}

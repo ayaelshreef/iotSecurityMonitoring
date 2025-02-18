@@ -17,9 +17,8 @@ captured_packets = []
 
 def packets_view(request, ip_address):
     try:
-        global filter_ip_address
-        filter_ip_address = ip_address    
-        device = Device.objects.get(ip_address=ip_address, is_active=True)
+        # Try to get the device regardless of active status
+        device = Device.objects.get(ip_address=ip_address)
         training_minutes_required = Setting.objects.first().training_minutes
         
         context = {
@@ -30,7 +29,8 @@ def packets_view(request, ip_address):
             'protocols': device.protocols,
             'connected_ips': device.connected_ips,
             'number_of_users': device.number_of_users,
-            'training_minutes_required': training_minutes_required
+            'training_minutes_required': training_minutes_required,
+            'is_active': device.is_active  # Add this to context for template
         }
         return render(request, 'packets.html', context)
     except Device.DoesNotExist:
