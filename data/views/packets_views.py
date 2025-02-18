@@ -17,6 +17,9 @@ captured_packets = []
 
 def packets_view(request, ip_address):
     try:
+        global filter_ip_address
+        filter_ip_address = ip_address  # Set the global filter IP
+        
         # Try to get the device regardless of active status
         device = Device.objects.get(ip_address=ip_address)
         training_minutes_required = Setting.objects.first().training_minutes
@@ -30,7 +33,7 @@ def packets_view(request, ip_address):
             'connected_ips': device.connected_ips,
             'number_of_users': device.number_of_users,
             'training_minutes_required': training_minutes_required,
-            'is_active': device.is_active  # Add this to context for template
+            'is_active': device.is_active
         }
         return render(request, 'packets.html', context)
     except Device.DoesNotExist:
@@ -40,65 +43,82 @@ def packets_view(request, ip_address):
         return render(request, 'packets.html', context)
 
 def start_sniffer_view(request):
-    global sniffer_thread
+    global sniffer_thread, sniffer_running, captured_packets
+    
+    # Clear previous packets
+    captured_packets = []
+    
     if sniffer_thread is None or not sniffer_thread.is_alive():
+        sniffer_running = True
         sniffer_thread = threading.Thread(target=start_sniffing)
+        sniffer_thread.daemon = True  # Make thread daemon so it stops when main thread stops
         sniffer_thread.start()
         return JsonResponse({'status': 'Sniffer started'})
     else:
         return JsonResponse({'status': 'Sniffer is already running'})
 
 def start_sniffing():
-    global sniffer_running
-    sniffer_running = True
-    sniff(prn=packet_callback, store=0, stop_filter=lambda x: not sniffer_running)
+    global sniffer_running, filter_ip_address
+    try:
+        # Create BPF filter for the specific IP
+        ip_filter = f"host {filter_ip_address}"
+        sniff(filter=ip_filter, prn=packet_callback, store=0, stop_filter=lambda x: not sniffer_running)
+    except Exception as e:
+        print(f"Error in sniffing: {e}")
+        sniffer_running = False
 
 def packet_callback(packet):
     global captured_packets, filter_ip_address
-    current_time = timezone.now()
-
-    device = Device.objects.get(ip_address=filter_ip_address, is_active=True)
-    first_packet_time = device.packet_set.aggregate(
-        first_time=Min('timestamp')
-    )['first_time']
-
-    if packet.haslayer(IP):
-        src_ip = packet[IP].src
-        dst_ip = packet[IP].dst
-        # Check if the packet's source or destination IP matches the filter IP
-        if src_ip == filter_ip_address or dst_ip == filter_ip_address:
+    try:
+        if IP in packet:
+            current_time = timezone.now()
             packet_data = {
-                'timestamp': format_timestamp(datetime.now()),
-                'src_ip': src_ip,
-                'dst_ip': dst_ip,
+                'timestamp': format_timestamp(current_time),
+                'src_ip': packet[IP].src,
+                'dst_ip': packet[IP].dst,
                 'protocol': packet[IP].proto,
                 'bytes_transferred': len(packet),
-                'details': packet.summary(),
             }
-            captured_packets.append(packet_data)
-        if device.training_minutes < Setting.objects.first().training_minutes and (not first_packet_time or 
-                    (current_time - first_packet_time).total_seconds() <= 60):
-                    Packet.objects.create(
-                        device=device,
-                        timestamp=current_time,
-                        src_ip=src_ip,
-                        dst_ip=dst_ip,
-                        protocol=packet[IP].proto,
-                        bytes_transferred=len(packet),
-                        details=packet.summary()
-                    )
+            
+            # Only store if packet involves our target IP
+            if packet_data['src_ip'] == filter_ip_address or packet_data['dst_ip'] == filter_ip_address:
+                captured_packets.append(packet_data)
+                
+                # Keep only the last 100 packets to prevent memory issues
+                if len(captured_packets) > 100:
+                    captured_packets = captured_packets[-100:]
+                
+                # Store packet in database if device is in training
+                try:
+                    device = Device.objects.get(ip_address=filter_ip_address)
+                    if device.training_minutes < Setting.objects.first().training_minutes:
+                        Packet.objects.create(
+                            device=device,
+                            timestamp=current_time,
+                            src_ip=packet_data['src_ip'],
+                            dst_ip=packet_data['dst_ip'],
+                            protocol=packet_data['protocol'],
+                            bytes_transferred=packet_data['bytes_transferred'],
+                            details=str(packet.summary())
+                        )
+                except Device.DoesNotExist:
+                    pass
+    except Exception as e:
+        print(f"Error in packet callback: {e}")
 
 def stop_sniffer_view(request):
-    global sniffer_running
+    global sniffer_running, sniffer_thread
     sniffer_running = False
+    if sniffer_thread and sniffer_thread.is_alive():
+        sniffer_thread.join(timeout=1)
+    sniffer_thread = None
     return JsonResponse({'status': 'Sniffer stopped'})
 
 def fetch_packets_view(request, ip_address):
-    filtered_packets = [
-        packet for packet in captured_packets 
-        if packet['src_ip'] == ip_address or packet['dst_ip'] == ip_address
-    ]
-    return JsonResponse({'packets': filtered_packets})
+    global captured_packets
+    return JsonResponse({
+        'packets': captured_packets
+    })
 
 def capture_device_packets(duration=60):
     global filter_ip_address, sniffer_running
