@@ -26,7 +26,6 @@ urlpatterns = [
     path('', pages_views.home),
     path('packets/<str:ip_address>/', packets_views.packets_view),
     
-    path('check/', dos_views.check_dos_attack),
     path('scan/', scan_network_views.scan_network_devices_view, name='scan_network'),
 
     path('fetch-packets/<str:ip_address>/', packets_views.fetch_packets_view),
@@ -34,6 +33,7 @@ urlpatterns = [
     path('stop-sniffer/', packets_views.stop_sniffer_view),
     
     path('devices/calculate-parameters', dos_views.calculate_parameters),
+    path('pack', dos_views.store_captured_packets),
     
     # Notification API endpoints
     path('api/notifications/', notifications_views.get_notifications),
@@ -45,7 +45,6 @@ urlpatterns = [
     path('settings/', pages_views.settings_view, name='settings'),
     path('api/settings/training-time/', settings_views.update_training_time, name='update_training_time'),
     path('api/settings/export-reports/', settings_views.export_reports, name='export_reports'),
-    
     # Device management endpoints
     path('api/devices/<int:device_id>/update/', pages_views.update_device, name='update_device'),
     path('api/devices/<int:device_id>/delete/', pages_views.delete_device, name='delete_device'),

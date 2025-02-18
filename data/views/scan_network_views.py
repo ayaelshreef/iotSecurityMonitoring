@@ -2,7 +2,7 @@ import ipaddress, subprocess, re, os
 from django.http import JsonResponse
 from scapy.all import ARP, Ether, srp
 from data.models import Device
-from data.utils import firebase
+# from data.utils import firebase
 from django.views.decorators.http import require_http_methods
 
 def convert_to_cidr(ip, netmask):

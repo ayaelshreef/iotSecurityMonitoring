@@ -15,9 +15,14 @@
     </header>
 
     <main>
-        <section id="deviceList" class="device-list card shadow-sm">
-            <div class="card-header bg-light">
-                <h2 class="h5 mb-0">Connected Devices</h2>
+        <section id="deviceList" class="device-list card shadow-sm mb-4">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h2 class="h5 mb-0">
+                    <span id="deviceTypeLabel">Active Devices</span>
+                </h2>
+                <button id="toggleDeviceType" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-exchange-alt mr-1"></i>Show Inactive
+                </button>
             </div>
             <ul class="list-group list-group-flush" id="devices-container">
                 <!-- Devices will be inserted here -->
@@ -151,6 +156,8 @@
 
 {% block extra_js %}
 <script>
+    let showingActive = true;
+
     function loadActiveDevices() {
         fetch('/', {
             headers: {
@@ -162,7 +169,18 @@
             const container = $('#devices-container');
             container.empty();
 
-            data.devices.forEach(device => {
+            const devices = showingActive 
+                ? data.devices.filter(device => device.is_active)
+                : data.devices.filter(device => !device.is_active);
+
+            if (devices.length === 0) {
+                const noDevicesTemplate = document.getElementById('no-devices-template');
+                const clone = noDevicesTemplate.content.cloneNode(true);
+                container.append(clone);
+                return;
+            }
+
+            devices.forEach(device => {
                 const deviceHtml = `
                     <li class="list-group-item hover-shadow">
                         <div class="d-flex justify-content-between align-items-center">
@@ -200,19 +218,12 @@
                 `;
                 container.append(deviceHtml);
             });
-
-            if (data.devices.length === 0) {
-                const noDevicesTemplate = document.getElementById('no-devices-template');
-                const clone = noDevicesTemplate.content.cloneNode(true);
-                container.append(clone);
-            }
         })
         .catch(error => {
             console.error('Error loading devices:', error);
         });
     }
 
-    // Load devices when page loads
     $(document).ready(function() {
         loadActiveDevices();
         
@@ -405,6 +416,23 @@
             $('#deviceIdentifier').val('');
             $('#addDeviceStatus').hide();
             $('#submitAddDevice').prop('disabled', false).html('Add Device');
+        });
+
+        // Add toggle handler
+        $('#toggleDeviceType').click(function() {
+            showingActive = !showingActive;
+            const button = $(this);
+            const label = $('#deviceTypeLabel');
+            
+            if (showingActive) {
+                button.html('<i class="fas fa-exchange-alt mr-1"></i>Show Inactive');
+                label.text('Active Devices');
+            } else {
+                button.html('<i class="fas fa-exchange-alt mr-1"></i>Show Active');
+                label.text('Inactive Devices');
+            }
+            
+            loadActiveDevices();
         });
     });
 </script>

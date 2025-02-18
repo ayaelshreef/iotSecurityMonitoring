@@ -331,7 +331,7 @@
                     {% for notification in notifications|slice:":5" %}
                     <div class="notification-item">
                         <div class="notification-time">
-                            {{ notification.timestamp|date:"Y-m-d H:i:s" }}
+                            {{ notification.timestamp|date:"Y-m-d H:i:s"|default:"2025-01-01 H:i:s" }}
                         </div>
                         <div class="notification-message">
                             {{ notification.message }}

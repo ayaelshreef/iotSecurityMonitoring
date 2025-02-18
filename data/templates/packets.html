@@ -183,8 +183,8 @@
                     <div class="stat-group">
                         <h4 class="stat-header"><i class="fas fa-network-wired mr-2"></i>Protocols</h4>
                         <div id="protocols-list" class="mt-2">
-                            {% for protocol, count in protocols.items %}
-                            <span class="badge badge-info mr-2 mb-2">{{ protocol }}: {{ count }}</span>
+                            {% for protocol in protocols %}
+                            <span class="badge badge-info mr-2 mb-2">{{ protocol }}</span>
                             {% endfor %}
                         </div>
                     </div>
@@ -193,8 +193,8 @@
                     <div class="stat-group">
                         <h4 class="stat-header"><i class="fas fa-project-diagram mr-2"></i>Connected IPs</h4>
                         <div id="connected-ips-list" class="mt-2">
-                            {% for ip, count in connected_ips.items %}
-                            <span class="badge badge-warning mr-2 mb-2">{{ ip }}: {{ count }}</span>
+                            {% for ip in connected_ips %}
+                            <span class="badge badge-warning mr-2 mb-2">{{ ip }}</span>
                             {% endfor %}
                         </div>
                     </div>

@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from ..models import Notification
+from ..utils import format_timestamp
 
 @require_http_methods(["GET"])
 def get_notifications(request):
@@ -10,7 +11,7 @@ def get_notifications(request):
         'notifications': [{
             'id': notification.id,
             'message': notification.message,
-            'timestamp': notification.timestamp.isoformat(),
+            'timestamp': format_timestamp(notification.timestamp),
             'is_read': notification.is_read,
         } for notification in notifications]
     })

@@ -10,21 +10,17 @@ class Device(models.Model):
     number_of_users = models.IntegerField(default=1)
     training_minutes = models.IntegerField(default=0)
     is_trained = models.BooleanField(default=False)
-    protocols = models.JSONField(default=dict)  # New field to store protocol counts
-    connected_ips = models.JSONField(default=dict)  # New field to store connected IPs and their counts
+    protocols = models.JSONField(default=list)  # Changed from dict to list
+    connected_ips = models.JSONField(default=list)  # Changed from dict to list
     
     def update_protocols(self, new_protocols):
-        current_protocols = self.protocols or {}
-        for protocol, count in new_protocols.items():
-            current_protocols[protocol] = current_protocols.get(protocol, 0) + count
-        self.protocols = current_protocols
+        current_protocols = self.protocols or []
+        self.protocols = list(set(current_protocols + new_protocols))  # Ensures unique values
         self.save()
 
     def update_connected_ips(self, new_ips):
-        current_ips = self.connected_ips or {}
-        for ip in new_ips:
-            current_ips[ip] = current_ips.get(ip, 0) + 1
-        self.connected_ips = current_ips
+        current_ips = self.connected_ips or []
+        self.connected_ips = list(set(current_ips + new_ips))  # Ensures unique values
         self.save()
 
     def save(self, *args, **kwargs):
@@ -45,8 +41,10 @@ class Packet(models.Model):
     details = models.TextField()
 
 class Notification(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, null=True)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
     details = models.TextField(null=True)
     type = models.CharField(max_length=255, blank=True, null=True)
+    parameter = models.CharField(max_length=255, blank=True, null=True)

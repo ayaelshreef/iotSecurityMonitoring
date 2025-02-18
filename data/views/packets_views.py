@@ -9,6 +9,7 @@ from data.models import Device, Packet
 from django.db.models import Min
 from django.utils import timezone
 from data.models import Setting
+from ..utils import format_timestamp
 sniffer_thread = None
 sniffer_running = False
 filter_ip_address = None 
@@ -67,7 +68,7 @@ def packet_callback(packet):
         # Check if the packet's source or destination IP matches the filter IP
         if src_ip == filter_ip_address or dst_ip == filter_ip_address:
             packet_data = {
-                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'timestamp': format_timestamp(datetime.now()),
                 'src_ip': src_ip,
                 'dst_ip': dst_ip,
                 'protocol': packet[IP].proto,
