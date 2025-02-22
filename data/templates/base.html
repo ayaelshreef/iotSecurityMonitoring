@@ -223,6 +223,10 @@
         $(document).ready(function () {
             let notificationsVisible = false;
             let previousActiveLink = null;
+            let currentActivePath = '{{ request.path }}';
+
+            // Store the initial active link
+            previousActiveLink = $('.nav-link.active');
 
             // Toggle notifications dropdown
             $('#notificationsDropdown').click(function (e) {
@@ -230,12 +234,10 @@
                 e.stopPropagation();
                 
                 if (!notificationsVisible) {
-                    // Store the previously active link and remove its active state
-                    previousActiveLink = $('.nav-link.active').not(this);
-                    previousActiveLink.removeClass('active');
-                    
-                    // Add active state to notifications link
-                    $(this).addClass('temp-active');
+                    // Remove active class from all nav links
+                    $('.nav-link').removeClass('active');
+                    // Add active class to notifications link
+                    $(this).addClass('active');
                 }
                 
                 // Only make the API call if there are unread notifications
@@ -257,18 +259,23 @@
             });
 
             // Close notifications when clicking outside
-            $(document).click(function () {
-                if (notificationsVisible) {
+            $(document).click(function (e) {
+                if (notificationsVisible && !$(e.target).closest('#notificationsDropdown, .notifications-dropdown').length) {
                     $('.notifications-dropdown').hide();
                     notificationsVisible = false;
                     
-                    // Remove temp-active from notifications link
-                    $('#notificationsDropdown').removeClass('temp-active');
+                    // Remove active class from notifications link
+                    $('#notificationsDropdown').removeClass('active');
                     
-                    // Restore the previous active link
-                    if (previousActiveLink) {
-                        previousActiveLink.addClass('active');
-                    }
+                    // Restore the active state based on current path
+                    $('.nav-link').each(function() {
+                        let href = $(this).attr('href');
+                        if (href === '/' && currentActivePath === '/') {
+                            $(this).addClass('active');
+                        } else if (href !== '/' && currentActivePath.includes(href)) {
+                            $(this).addClass('active');
+                        }
+                    });
                 }
             });
 

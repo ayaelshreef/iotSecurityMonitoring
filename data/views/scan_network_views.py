@@ -84,18 +84,23 @@ def scan_network_devices(request, update_only):
         broadcast = Ether(dst="ff:ff:ff:ff:ff:ff")
         result = srp(broadcast/arp, timeout=3, verbose=False)[0]
         
-        # Get all MAC addresses found in the scan
+        # Get all MAC addresses and their current IPs found in the scan
         active_macs = {received.hwsrc.lower(): received.psrc for _, received in result}
         
         if update_only:
-            # Update status of all existing devices
+            # Update status and IP addresses of all existing devices
             devices = Device.objects.all()
             for device in devices:
-                device.is_active = device.mac_address.lower() in active_macs
+                mac = device.mac_address.lower()
+                if mac in active_macs:
+                    device.is_active = True
+                    device.ip_address = active_macs[mac]  # Update IP address
+                else:
+                    device.is_active = False
                 device.save()
             return {
                 'status': 'success',
-                'message': 'Device statuses updated'
+                'message': 'Device statuses and IPs updated'
             }
         else:
             # Get existing MAC addresses from database
