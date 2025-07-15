@@ -1,0 +1,3633 @@
+[
+    {
+        "timestamp": "2025-02-22 12:54:54",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5894.133333333333,
+            "speed_pps": 10.45,
+            "protocols": [
+                17,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 12:55:58",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5216.0,
+            "speed_pps": 9.166666666666666,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 12:57:01",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5124.666666666667,
+            "speed_pps": 9.116666666666667,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 12:58:04",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5180.4,
+            "speed_pps": 9.183333333333334,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 12:59:08",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 4350.8,
+            "speed_pps": 7.9,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:00:11",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5180.533333333334,
+            "speed_pps": 9.166666666666666,
+            "protocols": [
+                17,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:01:15",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5892.133333333333,
+            "speed_pps": 9.433333333333334,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "239.255.255.250",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:02:18",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5392.4,
+            "speed_pps": 9.316666666666666,
+            "protocols": [
+                17,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:03:28",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5083.733333333334,
+            "speed_pps": 9.083333333333334,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:04:31",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5536.8,
+            "speed_pps": 9.383333333333333,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:05:35",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5320.133333333333,
+            "speed_pps": 9.316666666666666,
+            "protocols": [
+                17,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:06:38",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5231.066666666667,
+            "speed_pps": 9.233333333333333,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:07:42",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5175.333333333333,
+            "speed_pps": 9.166666666666666,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:08:45",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5174.933333333333,
+            "speed_pps": 9.133333333333333,
+            "protocols": [
+                17,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:09:48",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5861.6,
+            "speed_pps": 9.333333333333334,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:10:52",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5247.066666666667,
+            "speed_pps": 9.25,
+            "protocols": [
+                17,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:11:55",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5182.266666666666,
+            "speed_pps": 9.15,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:12:59",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5164.0,
+            "speed_pps": 9.133333333333333,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:14:02",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5541.733333333334,
+            "speed_pps": 9.566666666666666,
+            "protocols": [
+                17,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:15:21",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5144.4,
+            "speed_pps": 9.1,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:16:24",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5234.4,
+            "speed_pps": 9.316666666666666,
+            "protocols": [
+                1,
+                6,
+                17
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:17:28",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5882.533333333334,
+            "speed_pps": 9.4,
+            "protocols": [
+                17,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "239.255.255.250",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:18:31",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5194.666666666667,
+            "speed_pps": 9.15,
+            "protocols": [
+                17,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:19:34",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1930.8,
+            "speed_pps": 3.3833333333333333,
+            "protocols": [
+                17,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:20:35",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 7025.333333333333,
+            "speed_pps": 4.35,
+            "protocols": [
+                17,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "239.255.255.250",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:21:38",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1524.8,
+            "speed_pps": 1.05,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:22:41",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 2159.0666666666666,
+            "speed_pps": 1.3,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:23:45",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 3303.0666666666666,
+            "speed_pps": 1.4666666666666666,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:24:48",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1677.6,
+            "speed_pps": 1.2166666666666666,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:25:51",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 3891.0666666666666,
+            "speed_pps": 2.0,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:27:21",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1983.2,
+            "speed_pps": 1.5833333333333333,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:28:25",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 2061.866666666667,
+            "speed_pps": 1.1833333333333333,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "224.0.0.251",
+                "255.255.255.255",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:29:28",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1412.0,
+            "speed_pps": 1.0333333333333334,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:31:21",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1821.0666666666666,
+            "speed_pps": 1.4833333333333334,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:33:22",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1928.5333333333333,
+            "speed_pps": 1.5166666666666666,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:34:25",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1544.8,
+            "speed_pps": 1.15,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:35:29",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1538.2666666666667,
+            "speed_pps": 1.0833333333333333,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 13:36:32",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 2454.5333333333333,
+            "speed_pps": 1.4166666666666667,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "239.255.255.250",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 14:08:56",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1561.0666666666666,
+            "speed_pps": 1.0166666666666666,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 22:07:57",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 54992.933333333334,
+            "speed_pps": 45.75,
+            "protocols": [
+                17,
+                2,
+                6
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 22:09:01",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 32323.066666666666,
+            "speed_pps": 22.733333333333334,
+            "protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.255",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 22:10:05",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 101.33333333333333,
+            "speed_pps": 0.2,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.255",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 22:11:08",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 461.73333333333335,
+            "speed_pps": 0.3,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 22:12:15",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5719.333333333333,
+            "speed_pps": 4.533333333333333,
+            "protocols": [
+                17,
+                2,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-22 22:28:02",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 107.6,
+            "speed_pps": 0.1,
+            "protocols": [
+                17,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 01:50:09",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 6723.733333333334,
+            "speed_pps": 3.2333333333333334,
+            "protocols": [
+                17,
+                2,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "192.168.0.255",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:30:17",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1455.3333333333333,
+            "speed_pps": 1.0166666666666666,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:31:20",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1319.6,
+            "speed_pps": 0.95,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:32:24",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1464.2666666666667,
+            "speed_pps": 1.0333333333333334,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:33:27",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1434.8,
+            "speed_pps": 1.0166666666666666,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:34:30",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 2154.266666666667,
+            "speed_pps": 1.2666666666666666,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "224.0.0.251",
+                "255.255.255.255",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:35:33",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1353.3333333333333,
+            "speed_pps": 0.9666666666666667,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:36:37",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1444.1333333333334,
+            "speed_pps": 1.0333333333333334,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:37:40",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1487.0666666666666,
+            "speed_pps": 1.0333333333333334,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:38:43",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1353.3333333333333,
+            "speed_pps": 0.9666666666666667,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:39:46",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1398.8,
+            "speed_pps": 0.9833333333333333,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:40:50",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1508.4,
+            "speed_pps": 1.1,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:42:17",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1353.3333333333333,
+            "speed_pps": 0.9666666666666667,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:44:17",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5716.533333333334,
+            "speed_pps": 1.95,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:46:17",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1387.4666666666667,
+            "speed_pps": 0.9833333333333333,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:47:20",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1906.6666666666667,
+            "speed_pps": 1.3666666666666667,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:48:24",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1477.8666666666666,
+            "speed_pps": 1.05,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:50:17",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1371.0666666666666,
+            "speed_pps": 1.0,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:51:21",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 2167.2,
+            "speed_pps": 1.2666666666666666,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "239.255.255.250",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:52:24",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1319.6,
+            "speed_pps": 0.95,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:53:27",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1421.2,
+            "speed_pps": 1.0,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:55:17",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1353.3333333333333,
+            "speed_pps": 0.9666666666666667,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:56:20",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1492.8,
+            "speed_pps": 1.0666666666666667,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:57:24",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 1561.0666666666666,
+            "speed_pps": 1.1333333333333333,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 03:59:17",
+        "device": {
+            "id": 72,
+            "name": "Smart TV",
+            "ip": "172.20.10.13",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 2128.9333333333334,
+            "speed_pps": 1.2833333333333334,
+            "protocols": [
+                17,
+                6
+            ],
+            "connected_ips": [
+                "172.20.10.3",
+                "239.255.255.250",
+                "255.255.255.255",
+                "224.0.0.251"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 8054.53,
+            "speed_pps": 2.73,
+            "allowed_protocols": [
+                17,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "255.255.255.255",
+                "239.255.255.250",
+                "224.0.0.251",
+                "192.168.0.5",
+                "172.20.10.3"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:07:39",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 33953.46666666667,
+            "speed_pps": 24.533333333333335,
+            "protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1",
+                "255.255.255.255"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:08:43",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 862.0,
+            "speed_pps": 0.5,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:12:02",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 11294.933333333332,
+            "speed_pps": 5.116666666666666,
+            "protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "255.255.255.255",
+                "192.168.0.6",
+                "224.0.0.1",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:13:06",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 122.66666666666667,
+            "speed_pps": 0.23333333333333334,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:14:09",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 85.86666666666666,
+            "speed_pps": 0.16666666666666666,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:15:13",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 498.53333333333336,
+            "speed_pps": 0.36666666666666664,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:16:17",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 122.66666666666667,
+            "speed_pps": 0.23333333333333334,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:17:21",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 85.86666666666666,
+            "speed_pps": 0.16666666666666666,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:18:24",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 461.73333333333335,
+            "speed_pps": 0.3,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:20:28",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 79.73333333333333,
+            "speed_pps": 0.15,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:21:34",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5226.666666666667,
+            "speed_pps": 2.066666666666667,
+            "protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:38:41",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 79.73333333333333,
+            "speed_pps": 0.15,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:39:49",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 5783.466666666666,
+            "speed_pps": 2.216666666666667,
+            "protocols": [
+                17,
+                2,
+                1,
+                6
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:40:53",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 105.86666666666666,
+            "speed_pps": 0.21666666666666667,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.255",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:41:57",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 461.73333333333335,
+            "speed_pps": 0.3,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:43:01",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 231.06666666666666,
+            "speed_pps": 0.35,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.255",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:44:05",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 216.0,
+            "speed_pps": 0.3,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-02-23 20:45:08",
+        "device": {
+            "id": 68,
+            "name": "Device_:e0:11",
+            "ip": "192.168.0.1",
+            "is_trained": true,
+            "training_minutes": 60
+        },
+        "current_metrics": {
+            "volume_bps": 503.06666666666666,
+            "speed_pps": 0.3333333333333333,
+            "protocols": [
+                17,
+                2,
+                1
+            ],
+            "connected_ips": [
+                "192.168.0.6",
+                "224.0.0.1",
+                "239.255.255.250"
+            ]
+        },
+        "threshold_metrics": {
+            "volume_bps": 68988.67,
+            "speed_pps": 56.17,
+            "allowed_protocols": [
+                17,
+                2,
+                6,
+                1
+            ],
+            "allowed_ips": [
+                "192.168.0.3",
+                "192.168.0.255",
+                "255.255.255.255",
+                "239.255.255.250",
+                "192.168.0.10",
+                "192.168.0.5",
+                "192.168.0.6",
+                "224.0.0.1"
+            ]
+        }
+    }
+]
